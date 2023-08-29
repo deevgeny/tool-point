@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import Avatar from '@mui/material/Avatar';
@@ -18,11 +18,11 @@ const validationSchema = yup.object({
   email: yup
     .string('Укажите электронную почту')
     .email('Неверный формат электронной почты')
-    .required('Электронная почта обязательна'),
+    .required('Обязательное поле'),
   password: yup
     .string('Укажите пароль')
-    .min(8, 'Минимальная длина пароля 8 символов')
-    .required('Укажите пароль'),
+    .min(8, 'Длина пароля должна быть не менее 8 символов')
+    .required('Обязательное поле'),
 });
 
 

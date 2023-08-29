@@ -17,18 +17,18 @@ import { Link as RouterLink } from 'react-router-dom';
 const validationSchema = yup.object({
   firstName: yup
     .string('Укажите имя')
-    .required('Имя обязательно'),
+    .required('Обязательное поле'),
   lastName: yup
     .string('Укажите фамилию')
-    .required('Фамилия обязательна'),
+    .required('Обязательное поле'),
   email: yup
     .string('Укажите электронную почту')
     .email('Неверный формат электронной почты')
-    .required('Электронная почта обязательна'),
+    .required('Обязательное поле'),
   password: yup
     .string('Укажите пароль')
     .min(8, 'Длина пароля должна быть не менее 8 символов')
-    .required('Пароль обязателен'),
+    .required('Обязательное поле'),
 });
 
 
