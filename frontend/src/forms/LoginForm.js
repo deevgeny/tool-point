@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import Avatar from '@mui/material/Avatar';
@@ -10,9 +10,11 @@ import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Alert from '@mui/material/Alert';
 import Typography from '@mui/material/Typography';
-import { Link as RouterLink } from 'react-router-dom';
-
+import { Link as RouterLink, useNavigate, Form} from 'react-router-dom';
+import { login } from '../api/authAPI';
+import Error from '../pages/Error';
 
 const validationSchema = yup.object({
   email: yup
@@ -25,8 +27,8 @@ const validationSchema = yup.object({
     .required('Обязательное поле'),
 });
 
-
-function LoginForm() {
+function LoginForm({error, setError}) {
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -34,26 +36,19 @@ function LoginForm() {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      login({ ...values, navigate, setError});
     },
   });
 
   return (
-    <Box
-      sx={{
-        marginTop: 8,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}
-    >
+    <>
       <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
         <LockOutlinedIcon />
       </Avatar>
       <Typography component="h1" variant="h5">
         Вход
       </Typography>
-      <Box component="form" onSubmit={formik.handleSubmit} noValidate sx={{ mt: 1 }}>
+      <Box component={Form} onSubmit={formik.handleSubmit} noValidate sx={{ mt: 1 }}>
         <TextField
           margin="normal"
           required
@@ -87,6 +82,7 @@ function LoginForm() {
           control={<Checkbox value="remember" color="primary" />}
           label="Запомнить меня"
         />
+        {error.status === 401 && <Alert severity="error">Неверный адрес электронной почты или пароль!</Alert>}
         <Button
           type="submit"
           fullWidth
@@ -108,7 +104,7 @@ function LoginForm() {
           </Grid>
         </Grid>
       </Box>
-    </Box>
+    </>
   );
 }
 
