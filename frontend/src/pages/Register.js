@@ -8,7 +8,7 @@ export default function Register() {
   return (
     <Container component="main" maxWidth="xs">
       <RegisterForm />
-      <Copyright sx={{ mt: 5 }} />
+      {/*<Copyright sx={{ mt: 5 }} />*/}
     </Container>
   );
 }

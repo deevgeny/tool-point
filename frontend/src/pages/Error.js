@@ -4,9 +4,14 @@ import { useRouteError } from 'react-router-dom';
 
 function Error() {
   const error = useRouteError();
+  console.log('Inside error:', { ...error })
 
   return (
-    <div>Error</div>
+    <>
+    <h1>{error.status}</h1>
+    <h1>{error.statusText}</h1>
+</>
+
   )
 }
 

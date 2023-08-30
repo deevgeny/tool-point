@@ -1,17 +1,35 @@
-import React, {useState} from 'react';
+import React from 'react';
+import { Form, useActionData, json, redirect} from 'react-router-dom';
+import Avatar from '@mui/material/Avatar';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import LoginForm from '../forms/LoginForm';
-import Copyright from '../components/Copyright';
-import Error from './Error';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import NewLoginForm from '../forms/LoginForm';
+import { login } from '../api/authAPI';
 
 
-export default function Login() {
-  const [error, setError] = useState({ status: 0 });
-  console.log(error.status)
+export async function action({ request, params }) {
+  const data = await request.formData();
+  const result = await login({ email: data.get('email'), password: data.get('password') });
+  if (result.status === 200) {
+    return redirect('/');
+  }
+  
+  if (result.status === 401) {
+    return { ok: false };
+  }
+  
+  throw json({}, { status: result.status, statusText: result.statusText });
+}
+
+
+export default function LoginTest() {
+  // Use result to give feedback on page that user cred are not correct
+  const result = useActionData();
+
   return (
-    <Container component="main" maxWidth="xs" sx={{ maxHeight: '100vh' }}>
+    <Container component='main' maxWidth='xs' sx={{ maxHeight: '100vh' }}>
       <Box
         sx={{
           marginTop: 8,
@@ -20,16 +38,19 @@ export default function Login() {
           alignItems: 'center',
         }}
       >
-      {
-        error.status === 401 || error.status === 0? 
-        <LoginForm error={error} setError={setError} />
-          :
-        <Typography component="h1" variant="h5">
-          Ошибка {error.status} {error.message}
+        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component='h1' variant='h5'>
+          Вход
         </Typography>
-        }
       </Box>
-      <Copyright sx={{ mt: 8, mb: 4 }} />
+      <Box sx={{ mt: 1 }}>
+        <Form method='post'>
+          <NewLoginForm result={result} />
+        </Form>
+      </Box>
+      {/*<Copyright sx={{ mt: 8, mb: 4 }} />*/}
     </Container>
   );
 }
