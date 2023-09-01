@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'djoser',
     'django_filters',
     'users.apps.UsersConfig',
-    #'api.apps.ApiConfig',
+    'api_v1.apps.ApiV1Config',
 ]
 
 MIDDLEWARE = [
