@@ -1,32 +1,30 @@
 import * as jose from 'jose';
 
-class Token {
-  getAccessToken() {
+class TokenService {
+  getLocalAccessToken() {
     return localStorage.getItem('access');
   }
 
-  getRefreshToken() {
+  getLocalRefreshToken() {
     return localStorage.getItem('refresh');
   }
 
-  updateAccessToken(token) {
+  updateLocalAccessToken(token) {
     localStorage.setItem('access', token);
   }
   
-  updateRefreshToken(token) {
+  updateLocalRefreshToken(token) {
     localStorage.setItem('refresh', token);
   }
   
-  removeAccessToken() {
+  clear() {
     localStorage.removeItem('access');
-  }
-  
-  removeRefreshToken() {
     localStorage.removeItem('refresh');
+    localStorage.removeItem('role');
   }
 
-  isAccessTokenValid() {
-    const token = this.getAccessToken();
+  isLocalAccessTokenValid() {
+    const token = this.getLocalAccessToken();
     if (token) {
       const decodedToken = jose.decodeJwt(token);
       const currentTimeStamp = Math.floor(Date.now() / 1000);
@@ -36,17 +34,28 @@ class Token {
 
   }
 
-  isRefreshTokenValid() {
-    const token = this.getRefreshToken();
+  isLocalRefreshTokenValid() {
+    const token = this.getLocalRefreshToken();
     if (token) {
       const decodedToken = jose.decodeJwt(token);
       const currentTimeStamp = Math.floor(Date.now() / 1000);
       return decodedToken.exp > currentTimeStamp;
     }
     return false;
+  }
+
+  getLocalAuthContext() {
+    if (this.isLocalAccessTokenValid() || this.isLocalRefreshTokenValid()) {
+      return {
+        // access: this.getLocalAccessToken(),
+        // refresh: this.getLocalRefreshToken(),
+        role: jose.decodeJwt(this.getLocalAccessToken()).role
+      };
+    }
+    return {};
   }
 }
 
-const TokenService = new Token();
+const Token = new TokenService();
 
-export default TokenService;
+export default Token;

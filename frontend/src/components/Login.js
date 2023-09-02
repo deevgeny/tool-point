@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import * as yup from 'yup';
-import { useFormik } from 'formik';
+import { replace, useFormik } from 'formik';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -14,10 +14,11 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import CircularProgress from '@mui/material/CircularProgress';
-import useAuth from '../hooks/useAuth';
-import axios from '../api/axios';
-
-const LOGIN_URL = '/api/v1/jwt/create';
+import { Alert } from '@mui/material';
+import useAuthContext from '../hooks/useAuthContext';
+import Api from '../services/api';
+import * as jose from 'jose';
+import Token from '../services/token';
 
 const validationSchema = yup.object({
   email: yup
@@ -31,36 +32,44 @@ const validationSchema = yup.object({
 });
 
 function Login() {
-  const { auth, setAuth } = useAuth();
+  const { setAuth } = useAuthContext();
+  const [ error, setError ] = useState({});
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
+      // remember: false
     },
     validationSchema: validationSchema,
     onSubmit: handleSubmit
   });
 
   async function handleSubmit(values) {
- 
-    try {
-      const response = await axios.post(LOGIN_URL, JSON.stringify(values));
-      console.log(JSON.stringify(response))
-      console.log(response.data.access);
-      console.log(response.data.refresh);
-      setAuth({ access: response.data.access, refresh: response.data.refresh, role: 'user' });
-      navigate('/');
-    } catch (err) {
-      if (!err?.response) {
-        // setErrMsg('No server response')
-      } else if (err.response?.status === 400) {
-        // setErrMst('Missing email or password')
-      } else if (err.response?.status === 401) {
-        // setErrMsg('Unauthorized');
-      } else {
-        // other errors
-      }
+    const response = await Api.login({email: values.email, password: values.password});
+    if (response?.status === 200) {
+      const decodedToken= jose.decodeJwt(response.data.access);
+      setAuth({
+        // access: response.data.access,
+        // refresh: response.data.refresh,
+        role: decodedToken.role
+      });
+      Token.updateLocalAccessToken(response.data.access);
+      Token.updateLocalRefreshToken(response.data.refresh);
+      navigate('/', {replace: true});
+    } else if (response?.status === 401) {
+      setError({ message: 'Неверный адрес электронной почты или пароль!' });
+    } else if (response?.status === 400) {
+      setError({ message: 'Не указаны электронная почты или пароль!' });
+    } else {
+      // Response errors (http)
+      console.log('Status code:', response?.status);
+      console.log('Message:', response?.statusText);
+      // Axios errors (fetch)
+      console.log('Type:', response?.name);
+      console.log('Message:', response?.message);
+      console.log('Code:', response?.code);
+
     }
     formik.setSubmitting(false)
   }
@@ -116,10 +125,19 @@ function Login() {
             error={formik.touched.password && Boolean(formik.errors.password)}
             helperText={formik.touched.password && formik.errors.password}
           />
-          <FormControlLabel
-            control={<Checkbox value='remember' color='primary' />}
+          {/*<FormControlLabel
             label='Запомнить меня'
-          />
+            control={
+              <Checkbox
+                value='remember'
+                name='remember'
+                color='primary'
+                checked={formik.values.remember}
+                onChange={formik.handleChange}
+              />
+            }
+          />*/}
+          {error?.message && <Alert severity="error">{error.message}</Alert>}
           <Button
             type='submit'
             fullWidth

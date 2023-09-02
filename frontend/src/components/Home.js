@@ -21,6 +21,8 @@ import { mainListItems, secondaryListItems } from './listItems';
 import Chart from './Chart';
 import Deposits from './Deposits';
 import Orders from './Orders';
+import Token from '../services/token';
+import useAuthContext from '../hooks/useAuthContext';
 
 function Copyright(props) {
   return (
@@ -83,9 +85,16 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 function Home() {
   const [open, setOpen] = React.useState(true);
+  const { setAuth } = useAuthContext();
   const toggleDrawer = () => {
     setOpen(!open);
-  };
+  }
+  
+  function handleLogout() {
+    Token.clear();
+    setAuth({});
+  }
+
   return (
     <>
       <AppBar position="absolute" open={open}>
@@ -114,6 +123,11 @@ function Home() {
           sx={{ flexGrow: 1 }}
         >
           Dashboard
+        </Typography>
+        <Typography
+          onClick={handleLogout}
+        >
+            Logout
         </Typography>
         <IconButton color="inherit">
           <Badge badgeContent={4} color="secondary">

@@ -1,12 +1,11 @@
 import React from 'react';
-import useAuth from '../hooks/useAuth';
+import useAuthContext from '../hooks/useAuthContext';
 import { useLocation, Navigate, Outlet } from 'react-router-dom';
 
 
 function RequireAuth({ allowedRoles }) {
-  const { auth } = useAuth();
+  const { auth } = useAuthContext();
   const location = useLocation();
-  console.log(auth)
   return (
     allowedRoles.includes(auth?.role)
       ? <Outlet />

@@ -154,6 +154,14 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
 }
 
+# Simple JWT settings
+
+SIMPLE_JWT = {
+  "TOKEN_OBTAIN_SERIALIZER": "api_v1.serializers.CustomTokenObtainPairSerializer",
+}
+
+# CORS settings
+
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000', 'http://127.0.0.1:8000'
 ]
