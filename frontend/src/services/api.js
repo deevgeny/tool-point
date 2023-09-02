@@ -131,6 +131,7 @@ const ApiService = {
 
 const Api = {
   login: (body) => ApiService.postPure('/jwt/create', body),
+  register: (body) => ApiService.postPure('/users', body)
 }
 
 export default Api;

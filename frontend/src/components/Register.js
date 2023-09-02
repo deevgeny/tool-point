@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { Link as RouterLink } from 'react-router-dom';
@@ -13,6 +13,8 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import { Alert } from '@mui/material';
+import Api from '../services/api';
 
 
 const validationSchema = yup.object({
@@ -28,24 +30,53 @@ const validationSchema = yup.object({
     .required('Обязательное поле'),
   password: yup
     .string('Укажите пароль')
-    .min(8, 'Длина пароля должна быть не менее 8 символов')
-    .required('Обязательное поле'),
+    .required('Обязательное поле')
+    .min(8, 'Длина пароля должна быть не менее 8 символов'),
+  retypePassword: yup
+    .string('Укажите пароль')
+    .required('Обязательное поле')
+    .oneOf([yup.ref('password')], 'Указанный пароль не совпадает')
 });
 
 
 function Register() {
+  const [message, setMessage] = useState({});
   const formik = useFormik({
     initialValues: {
       firstName: '',
       lastName: '',
       email: '',
       password: '',
+      retypePassword: '',
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-    },
+    onSubmit: handleFormSubmit
   });
+
+  async function handleFormSubmit(values) {
+    const response = await Api.register({
+      first_name: values.firstName,
+      last_name: values.lastName,
+      email: values.email,
+      password: values.password
+    });
+    if (response?.status === 200) {
+      setMessage({ ok: true, text: 'Поздравляем с успешной регистрацией!' });
+    } else if (response?.status === 401) {
+      setMessage({ ok: false, text: 'Неверный адрес электронной почты или пароль!' });
+    } else if (response?.status === 400) {
+      setMessage({ ok: false, text: 'Не указаны электронная почта или пароль!' });
+    } else {
+      // Response errors (http)
+      console.log('Status code:', response?.status);
+      console.log('Message:', response?.statusText);
+      // Axios errors (fetch)
+      console.log('Type:', response?.name);
+      console.log('Message:', response?.message);
+      console.log('Code:', response?.code);
+    }
+    formik.setSubmitting(false)
+  }
 
   return (
     <Container component='main' maxWidth='xs'>
@@ -129,12 +160,32 @@ function Register() {
               />
             </Grid>
             <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                name='retypePassword'
+                label='Повторитe пароль'
+                type='password'
+                id='retypePassword'
+                autoComplete='retype-password'
+                value={formik.values.retypePassword}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.retypePassword && Boolean(formik.errors.retypePassword)}
+                helperText={formik.touched.retypePassword && formik.errors.retypePassword}
+
+              />
+            </Grid>
+            <Grid item xs={12}>
               <FormControlLabel
                 control={<Checkbox value='allowExtraEmails' color='primary' />}
                 label='Хочу получать уведомления на электронную почту.'
               />
             </Grid>
           </Grid>
+
+          { message?.ok && <Alert severity="success">{message.text}</Alert> }
+          {!message?.ok && <Alert severity="error">{message.text}</Alert>}    
           <Button
             type='submit'
             fullWidth

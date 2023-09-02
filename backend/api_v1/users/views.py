@@ -10,3 +10,10 @@ class UserViews(APIView):
 
         print(vars(request.user))
         return Response(serializer.data)
+
+
+class UserCreateView(APIView):
+    def post(self, request):
+        print(request.data)
+
+        return Response({'answer': 'hello'})

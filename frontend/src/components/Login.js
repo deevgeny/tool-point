@@ -42,11 +42,14 @@ function Login() {
       // remember: false
     },
     validationSchema: validationSchema,
-    onSubmit: handleSubmit
+    onSubmit: handleFormSubmit
   });
 
-  async function handleSubmit(values) {
-    const response = await Api.login({email: values.email, password: values.password});
+  async function handleFormSubmit(values) {
+    const response = await Api.login({
+      email: values.email,
+      password: values.password
+    });
     if (response?.status === 200) {
       const decodedToken= jose.decodeJwt(response.data.access);
       setAuth({
@@ -60,7 +63,7 @@ function Login() {
     } else if (response?.status === 401) {
       setError({ message: 'Неверный адрес электронной почты или пароль!' });
     } else if (response?.status === 400) {
-      setError({ message: 'Не указаны электронная почты или пароль!' });
+      setError({ message: 'Не указаны электронная почта или пароль!' });
     } else {
       // Response errors (http)
       console.log('Status code:', response?.status);
@@ -69,7 +72,6 @@ function Login() {
       console.log('Type:', response?.name);
       console.log('Message:', response?.message);
       console.log('Code:', response?.code);
-
     }
     formik.setSubmitting(false)
   }

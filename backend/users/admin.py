@@ -9,7 +9,7 @@ from .models import User
 class CustomUserAdmin(UserAdmin):
     """Register custom user model on admin site."""
     fieldsets = (
-        (None, {"fields": ("username", "password")}),
+        (None, {"fields": ("password",)}),
         (_("Personal info"),
          {"fields": ("first_name", "last_name", "email")}),
         (_("Permissions"),
@@ -19,10 +19,11 @@ class CustomUserAdmin(UserAdmin):
     )
     add_fieldsets = (
         (None, {"classes": ("wide",),
-                "fields": ("username", "last_name", "first_name", "password1",
+                "fields": ("last_name", "first_name", "password1",
                            "password2", "email")}),
     )
-    list_display = ("id", "username", "last_name", "first_name", "email",
+    list_display = ("id", "last_name", "first_name", "email",
                     "is_active", "is_staff", "is_superuser")
-    list_display_links = ("username",)
+    list_display_links = ("first_name",)
     list_filter = ("is_staff", "is_active", "is_superuser")
+    ordering = ('email', )
