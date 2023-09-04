@@ -47,8 +47,8 @@ class TokenService {
   getLocalAuthContext() {
     if (this.isLocalAccessTokenValid() || this.isLocalRefreshTokenValid()) {
       return {
-        // access: this.getLocalAccessToken(),
-        // refresh: this.getLocalRefreshToken(),
+        access: this.getLocalAccessToken(),
+        refresh: this.getLocalRefreshToken(),
         role: jose.decodeJwt(this.getLocalAccessToken()).role
       };
     }

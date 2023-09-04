@@ -5,8 +5,6 @@ import { Link as RouterLink } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -15,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Alert } from '@mui/material';
 import Api from '../services/api';
+import { useNavigate } from 'react-router-dom';
 
 
 const validationSchema = yup.object({
@@ -41,6 +40,7 @@ const validationSchema = yup.object({
 
 function Register() {
   const [message, setMessage] = useState({});
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       firstName: '',
@@ -60,20 +60,18 @@ function Register() {
       email: values.email,
       password: values.password
     });
-    if (response?.status === 200) {
-      setMessage({ ok: true, text: 'Поздравляем с успешной регистрацией!' });
-    } else if (response?.status === 401) {
-      setMessage({ ok: false, text: 'Неверный адрес электронной почты или пароль!' });
+    if (response?.status === 201) {
+      navigate('/', {replace: true});
     } else if (response?.status === 400) {
-      setMessage({ ok: false, text: 'Не указаны электронная почта или пароль!' });
+      setMessage({ status: 'error', text: Object.values(response.data)[0] });
     } else {
       // Response errors (http)
-      console.log('Status code:', response?.status);
-      console.log('Message:', response?.statusText);
+      // console.log('Status code:', response?.status);
+      // console.log('Message:', response?.statusText);
       // Axios errors (fetch)
-      console.log('Type:', response?.name);
-      console.log('Message:', response?.message);
-      console.log('Code:', response?.code);
+      // console.log('Type:', response?.name);
+      // console.log('Message:', response?.message);
+      // console.log('Code:', response?.code);
     }
     formik.setSubmitting(false)
   }
@@ -176,16 +174,9 @@ function Register() {
 
               />
             </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value='allowExtraEmails' color='primary' />}
-                label='Хочу получать уведомления на электронную почту.'
-              />
-            </Grid>
           </Grid>
-
-          { message?.ok && <Alert severity="success">{message.text}</Alert> }
-          {!message?.ok && <Alert severity="error">{message.text}</Alert>}    
+          
+          {message?.status && message.text.map((item, id) => <Alert severity={message.status} key={id}>{item}</Alert>)}    
           <Button
             type='submit'
             fullWidth

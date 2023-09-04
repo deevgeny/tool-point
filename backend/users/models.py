@@ -36,12 +36,16 @@ class UserManager(BaseUserManager):
             email, password, first_name, last_name, **extra_fields
         )
         user.is_superuser = True
+        user.is_staff = True
         user.save()
         return user
-    
+
 
 class User(AbstractUser):
     """Custom user model."""
+    class Role(models.TextChoices):
+        USER = 'USER', 'Пользователь'
+        ADMIN = 'ADMIN', 'Администратор'
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
@@ -50,5 +54,11 @@ class User(AbstractUser):
     email = models.EmailField(_("email address"), unique=True)
     first_name = models.CharField(_("first name"), max_length=150)
     last_name = models.CharField(_("last name"), max_length=150)
+    role = models.CharField(
+        verbose_name='Роль',
+        max_length=16,
+        choices=Role.choices,
+        default=Role.USER,
+    )
 
     objects = UserManager()

@@ -4,34 +4,36 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-import Home from './components/Home';
+import Home from './pages/Home';
 import Layout from './components/Layout';
-import Login from './components/Login';
-import Register from './components/Register';
-import Unauthorized from './components/Unauthorized';
-import Missing from './components/Missing';
-import RequireAuth from './components/RequireAuth';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Unauthorized from './pages/Unauthorized';
+import NotFound from './pages/NotFound';
+import AuthorizedOnly from './permissions/AuthorizedOnly';
+import AnonymousOnly from './permissions/AnonymousOnly';
 
 const ROLES = {
-  User: 'user'
+  User: 'USER'
 }
-
 
 function App() {
   return (
     <Routes>
       <Route path='/' element={<Layout />}>
-        <Route path='login' element={<Login />} />
-        <Route path='register' element={<Register />} />
-        <Route path='unauthorized' element={<Unauthorized />} />
+        {/* Only for anonymous users */}
+        <Route element={<AnonymousOnly />}>
+          <Route path='login' element={<Login />} />
+          <Route path='register' element={<Register />} />
+        </Route>
         
         {/* Protected routes */}
-        <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+        <Route element={<AuthorizedOnly allowedRoles={[ROLES.User]} />}>
           <Route path='/' element={<Home />} />
         </Route>
 
-        {/* For not existing route */}
-        <Route path='*' element={<Missing />} />
+        <Route path='unauthorized' element={<Unauthorized />} />
+        <Route path='*' element={<NotFound />} />
       </Route>
     </Routes>
   );

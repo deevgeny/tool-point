@@ -31,15 +31,14 @@ const validationSchema = yup.object({
     .required('Обязательное поле'),
 });
 
-function Login() {
+function Login(props) {
   const { setAuth } = useAuthContext();
-  const [ error, setError ] = useState({});
+  const [message, setMessage] = useState(props.message || {});
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
-      // remember: false
     },
     validationSchema: validationSchema,
     onSubmit: handleFormSubmit
@@ -53,17 +52,17 @@ function Login() {
     if (response?.status === 200) {
       const decodedToken= jose.decodeJwt(response.data.access);
       setAuth({
-        // access: response.data.access,
-        // refresh: response.data.refresh,
+        access: response.data.access,
+        refresh: response.data.refresh,
         role: decodedToken.role
       });
       Token.updateLocalAccessToken(response.data.access);
       Token.updateLocalRefreshToken(response.data.refresh);
       navigate('/', {replace: true});
     } else if (response?.status === 401) {
-      setError({ message: 'Неверный адрес электронной почты или пароль!' });
+      setMessage({ status: 'error', text: 'Неверный адрес электронной почты или пароль!' });
     } else if (response?.status === 400) {
-      setError({ message: 'Не указаны электронная почта или пароль!' });
+      setMessage({ status: 'error', text: 'Не указаны электронная почта или пароль!' });
     } else {
       // Response errors (http)
       console.log('Status code:', response?.status);
@@ -127,19 +126,7 @@ function Login() {
             error={formik.touched.password && Boolean(formik.errors.password)}
             helperText={formik.touched.password && formik.errors.password}
           />
-          {/*<FormControlLabel
-            label='Запомнить меня'
-            control={
-              <Checkbox
-                value='remember'
-                name='remember'
-                color='primary'
-                checked={formik.values.remember}
-                onChange={formik.handleChange}
-              />
-            }
-          />*/}
-          {error?.message && <Alert severity="error">{error.message}</Alert>}
+          {message?.status && <Alert severity={message.status}>{message.text}</Alert>}
           <Button
             type='submit'
             fullWidth
