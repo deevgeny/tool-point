@@ -50,7 +50,7 @@ services:
 
   frontend:
     # Use prod or dev tags for production or development servers
-    image: deevgeny/tool-point-backend:dev
+    image: deevgeny/tool-point-frontend:dev
     networks:
       - my_network
       - web
