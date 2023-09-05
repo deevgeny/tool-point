@@ -19,8 +19,8 @@ RUN ["chmod", "+x", "./docker-entrypoint.sh"]
 # Development image
 FROM base as dev
 WORKDIR /app
-EXPOSE 8000
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+EXPOSE $BACKEND_PORT
+CMD ["sh", "-c", "python manage.py runserver 0.0.0.0:$BACKEND_PORT"]
 
 # Production image
 FROM base AS prod

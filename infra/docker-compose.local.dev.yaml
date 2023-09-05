@@ -26,6 +26,7 @@ services:
     build:
       context: ../backend
       target: dev
+    image: "backend:local-dev"
     restart: always
     volumes:
       - ../backend:/app/:ro
@@ -42,6 +43,7 @@ services:
     build:
       context: ../frontend
       target: dev
+    image: "frontend:local-dev"
     volumes:
       - ../frontend/src:/app/src:ro
     ports:
