@@ -19,5 +19,5 @@ python manage.py createadminuser
 if [ $DEBUG ]; then
 python manage.py runserver 0.0.0.0:$BACKEND_PORT $@
 else
-gunicorn config.wsgi:application -b $BACKEND_PORT $@
+gunicorn config.wsgi:application -b 0.0.0.0:$BACKEND_PORT $@
 fi
