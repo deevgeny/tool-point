@@ -22,7 +22,7 @@ services:
 
   backend:
     # Use prod or dev tags for production or development servers
-    image: deevgeny:tool-point-backend:dev
+    image: deevgeny/tool-point-backend:dev
     restart: always
     volumes:
       - media:/app/media/
@@ -50,7 +50,7 @@ services:
 
   frontend:
     # Use prod or dev tags for production or development servers
-    image: deevgeny:tool-point-backend:dev
+    image: deevgeny/tool-point-backend:dev
     networks:
       - my_network
       - web
