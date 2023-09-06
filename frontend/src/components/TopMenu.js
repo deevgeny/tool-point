@@ -1,6 +1,7 @@
-import * as React from 'react';
+import { useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import MuiAppBar from '@mui/material/AppBar';
+import Stack from '@mui/material/Stack';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
@@ -8,8 +9,12 @@ import Badge from '@mui/material/Badge';
 import MenuIcon from '@mui/icons-material/Menu';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import LogoutIcon from '@mui/icons-material/Logout';
+import AccountMenuButton from './AccountMenuButton';
 import Token from '../services/token';
 import useAuthContext from '../hooks/useAuthContext';
+import axiosInstance from '../api/axiosApi';
+import useAxiosFunction from '../hooks/useAxiosFunction';
+import { Avatar, CircularProgress, Icon, Tooltip } from '@mui/material';
 
 const drawerWidth = 240;
 
@@ -31,7 +36,9 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
+
 function TopMenu({ open, toggleDrawer }) {
+  const [user, error, loading, axiosFetch] = useAxiosFunction();
   const { setAuth } = useAuthContext();
   
   function handleLogout() {
@@ -39,18 +46,26 @@ function TopMenu({ open, toggleDrawer }) {
     setAuth({});
   }
 
-  return (
+  useEffect(() => {
+    axiosFetch({
+      axiosInstance,
+      method: 'GET',
+      url: '/users/me'
+    });
 
-    <AppBar position="absolute" open={open}>
+  }, []);
+
+  return (
+    <AppBar position='absolute' open={open}>
       <Toolbar
         sx={{
           pr: '24px', // keep right padding when drawer closed
         }}
       >
         <IconButton
-          edge="start"
-          color="inherit"
-          aria-label="open drawer"
+          edge='start'
+          color='inherit'
+          aria-label='open drawer'
           onClick={toggleDrawer}
           sx={{
             marginRight: '36px',
@@ -60,22 +75,29 @@ function TopMenu({ open, toggleDrawer }) {
           <MenuIcon />
         </IconButton>
         <Typography
-          component="h1"
-          variant="h6"
-          color="inherit"
+          component='h1'
+          variant='h6'
+          color='inherit'
           noWrap
           sx={{ flexGrow: 1 }}
         >
           Dashboard
         </Typography>
-        <IconButton color="inherit">
-          <Badge badgeContent={4} color="secondary">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <IconButton color="inherit" onClick={handleLogout}>
-          <LogoutIcon />
-        </IconButton>
+        <Tooltip title='Мой аккаунт'>
+          <IconButton color='inherit' size='small'>
+            <Avatar>
+              {user?.first_name && `${user?.first_name[0]}${user?.last_name[0]}`}
+            </Avatar>
+          </IconButton>
+        </Tooltip>
+        <Tooltip title='Выход'>
+          <IconButton
+            color='inherit'
+            onClick={handleLogout}
+          >
+            <LogoutIcon />
+          </IconButton>
+        </Tooltip>
       </Toolbar>
     </AppBar>
   )

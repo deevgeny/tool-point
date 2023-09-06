@@ -1,5 +1,5 @@
-import axios from 'axios';
-import Token from './token';
+import axios from "axios";
+import Token from "./token";
 
 const {
   REACT_APP_API_URL: API_URL,
@@ -12,7 +12,7 @@ const axiosInstance = axios.create({
   baseURL: baseUrl,
   withCredentials: false,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
@@ -20,41 +20,41 @@ const axiosRefresh = axios.create({
   baseURL: baseUrl,
   withCredentials: false,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
 axiosInstance.interceptors.request.use(
-  function (config) {
+  (config) => {
     const token = Token.getLocalAccessToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  function(error) {
+  (error) => {
     return Promise.reject(error);
   }
 );
 
 axiosInstance.interceptors.response.use(
-  function (response) {
+  (response) => {
     return response;
   },
-  function (error) {
+  (error) => {
     const prevRequest = error?.config;
     if (error?.response?.status === 403 && !prevRequest?.sent) {
       prevRequest.sent = true;
-      console.log('inside interceptor response')
+      console.log("inside interceptor response")
       const data = JSON.stringify({ refresh: Token.getLocalRefreshToken() });
-      const response = axiosRefresh.post('/jwt/refresh', data);
-      prevRequest.headers['Authorization'] = `Bearer ${response?.data.access}`;
+      const response = axiosRefresh.post("/jwt/refresh", data);
+      prevRequest.headers["Authorization"] = `Bearer ${response?.data.access}`;
       return axiosInstance(prevRequest);
     }
     return Promise.reject(error);
   });
 
-async function handleFetch(url, body, options = {}) {
+async function handleFetch(url, body, skip = [], options = {}) {
   try {
     const response = await axiosInstance(
       url,
@@ -68,70 +68,37 @@ async function handleFetch(url, body, options = {}) {
     if (!error?.response) {
       // Fetch error
       return error;
+    } else if (skip.includes(error.response.status)) {
+      // Return skipped errors to component
+      return error.response
     }
-    // Http error
-    return error.response;
-  }
-}
-
-async function pureFetch(url, body, options = {}) {
-  try {
-    const response = await axiosInstance(
-      url,
-      {
-        ...options,
-        data: JSON.stringify(body)
-      }
-    );
-    return response;
-  } catch (error) {
-    if (!error?.response) {
-      // Fetch error
-      return error;
-    }
-    // Http error
+    // Raise error
     return error.response;
   }
 }
 
 const ApiService = {
-  // Handled
-  get: async (url, body, options) => {
-    return handleFetch(url, body, {...options, method: 'get'});
+  get: async (url, body, skip, options) => {
+    return handleFetch(url, body, skip, {...options, method: "get"});
   },
-  post: async (url, body, options) => {
-    return handleFetch(url, body, {...options, method: 'post'});
+  post: async (url, body, skip, options) => {
+    return handleFetch(url, body, skip, {...options, method: "post"});
   },
-  put: async (url, body, options) => {
-    return handleFetch(url, body, {...options, method: 'put'});
+  put: async (url, body, skip, options) => {
+    return handleFetch(url, body, skip, {...options, method: "put"});
   },
-  patch: async (url, body, options) => {
-    return handleFetch(url, body, {...options, method: 'patch'});
+  patch: async (url, body, skip, options) => {
+    return handleFetch(url, body, skip, {...options, method: "patch"});
   },
-  delete: async (url, body, options) => {
-    return handleFetch(url, body, {...options, method: 'delete'});
-  },
-  // Pure
-  getPure: async (url, body, options) => {
-    return pureFetch(url, body, {...options, method: 'get'});
-  },
-  postPure: async (url, body, options) => {
-    return pureFetch(url, body, {...options, method: 'post'});
-  },
-  putPure: async (url, body, options) => {
-    return pureFetch(url, body, {...options, method: 'put'});
-  },
-  patchPure: async (url, body, options) => {
-    return pureFetch(url, body, {...options, method: 'patch'});
-  },
-  deletePure: async (url, body, options) => {
-    return pureFetch(url, body, {...options, method: 'delete'});
+  delete: async (url, body, skip, options) => {
+    return handleFetch(url, body, skip, {...options, method: "delete"});
   },
 }
 
 const Api = {
-  login: (body) => ApiService.postPure('/jwt/create', body),
-  register: (body) => ApiService.postPure('/users', body)
+  login: (body, skip) => ApiService.post("/jwt/create", body, skip),
+  register: (body, skip) => ApiService.post("/users", body, skip),
+  getUserInfo: (body, skip) => ApiService.get("/users/me", body, skip)
 }
 
 export default Api;

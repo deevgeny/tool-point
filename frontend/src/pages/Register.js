@@ -59,19 +59,11 @@ function Register() {
       last_name: values.lastName,
       email: values.email,
       password: values.password
-    });
+    }, [400]);
     if (response?.status === 201) {
       navigate('/', {replace: true});
     } else if (response?.status === 400) {
       setMessage({ status: 'error', text: Object.values(response.data)[0] });
-    } else {
-      // Response errors (http)
-      // console.log('Status code:', response?.status);
-      // console.log('Message:', response?.statusText);
-      // Axios errors (fetch)
-      // console.log('Type:', response?.name);
-      // console.log('Message:', response?.message);
-      // console.log('Code:', response?.code);
     }
     formik.setSubmitting(false)
   }

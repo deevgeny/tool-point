@@ -44,6 +44,8 @@ services:
       context: ../frontend
       target: dev
     image: "frontend:local-dev"
+    env_file:
+      - ../frontend/.env.development.local
     volumes:
       - ../frontend/src:/app/src:ro
     ports:
