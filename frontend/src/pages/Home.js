@@ -54,7 +54,7 @@ function Home() {
   
   return (
     <>
-      <TopMenu open={ open } toggleDrawer={ toggleDrawer } drawerWidth={drawerWidth} />
+      <TopMenu open={open} toggleDrawer={toggleDrawer} drawerWidth={drawerWidth} />
       <Drawer variant="permanent" open={open}>
         <Toolbar
           sx={{

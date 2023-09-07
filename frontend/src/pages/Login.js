@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as yup from "yup";
 import * as jose from "jose";
 import { useFormik } from "formik";
@@ -15,8 +15,8 @@ import Container from "@mui/material/Container";
 import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
 import useAuthContext from "../hooks/useAuthContext";
-import Api from "../services/api";
 import Token from "../services/token";
+import useAxiosApiFunction, { API } from "../hooks/useAxiosApiFunction";
 
 const validationSchema = yup.object({
   email: yup
@@ -29,9 +29,10 @@ const validationSchema = yup.object({
     .required("Обязательное поле"),
 });
 
-function Login(props) {
+function Login() {
+  const { response, error, loading, axiosFetch } = useAxiosApiFunction();
   const { setAuth } = useAuthContext();
-  const [message, setMessage] = useState(props.message || {});
+  const [message, setMessage] = useState({});
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
@@ -41,14 +42,14 @@ function Login(props) {
     validationSchema: validationSchema,
     onSubmit: handleFormSubmit
   });
+  
+  function handleFormSubmit(values) {
+    axiosFetch(API.login, {data: {...values}, skip: [401, 400]});
+  }
 
-  async function handleFormSubmit(values) {
-    const response = await Api.login({
-      email: values.email,
-      password: values.password
-    }, [401, 400]);
+  useEffect(() => {
     if (response?.status === 200) {
-      const decodedToken= jose.decodeJwt(response.data.access);
+      const decodedToken = jose.decodeJwt(response.data.access);
       setAuth({
         access: response.data.access,
         refresh: response.data.refresh,
@@ -56,13 +57,16 @@ function Login(props) {
       });
       Token.updateLocalAccessToken(response.data.access);
       Token.updateLocalRefreshToken(response.data.refresh);
-      navigate("/", {replace: true});
-    } else if (response?.status === 401) {
+      navigate("/", { replace: true });
+    } else if (error?.status === 401) {
       setMessage({ status: "error", text: "Неверный адрес электронной почты или пароль!" });
-    } else if (response?.status === 400) {
+    } else if (error?.status === 400) {
       setMessage({ status: "error", text: "Не указаны электронная почта или пароль!" });
     }
-  }
+    // formik.setSubmitting(false);
+    
+    // eslint-disable-next-line
+  }, [response, error]);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -75,7 +79,7 @@ function Login(props) {
         }}
       >
         {
-          formik.isSubmitting 
+          loading
           ? <CircularProgress />
           : <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
               <LockOutlinedIcon />

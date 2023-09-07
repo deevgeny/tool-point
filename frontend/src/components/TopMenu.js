@@ -1,20 +1,17 @@
 import { useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import MuiAppBar from '@mui/material/AppBar';
-import Stack from '@mui/material/Stack';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
 import MenuIcon from '@mui/icons-material/Menu';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import LogoutIcon from '@mui/icons-material/Logout';
-import AccountMenuButton from './AccountMenuButton';
 import Token from '../services/token';
 import useAuthContext from '../hooks/useAuthContext';
-import axiosInstance from '../api/axiosApi';
-import useAxiosFunction from '../hooks/useAxiosFunction';
-import { Avatar, CircularProgress, Icon, Tooltip } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import Tooltip from '@mui/material/Tooltip';
+import useAxiosApiFunction, { API } from '../hooks/useAxiosApiFunction';
+import NoAccountsIcon from '@mui/icons-material/NoAccounts';
 
 const drawerWidth = 240;
 
@@ -38,8 +35,9 @@ const AppBar = styled(MuiAppBar, {
 
 
 function TopMenu({ open, toggleDrawer }) {
-  const [user, error, loading, axiosFetch] = useAxiosFunction();
+  const { response, axiosFetch } = useAxiosApiFunction();
   const { setAuth } = useAuthContext();
+
   
   function handleLogout() {
     Token.clear();
@@ -47,12 +45,9 @@ function TopMenu({ open, toggleDrawer }) {
   }
 
   useEffect(() => {
-    axiosFetch({
-      axiosInstance,
-      method: 'GET',
-      url: '/users/me'
-    });
-
+    axiosFetch(API.currentUserInfo);
+    
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -83,10 +78,14 @@ function TopMenu({ open, toggleDrawer }) {
         >
           Dashboard
         </Typography>
-        <Tooltip title='Мой аккаунт'>
+        <Tooltip title={response?.data?.first_name ? 'Мой аккаунт': 'Нет данных'}>
           <IconButton color='inherit' size='small'>
             <Avatar>
-              {user?.first_name && `${user?.first_name[0]}${user?.last_name[0]}`}
+              {
+                response?.data?.first_name
+                  ? `${response?.data?.first_name[0]}${response?.data?.last_name[0]}`
+                  : <NoAccountsIcon />
+              }
             </Avatar>
           </IconButton>
         </Tooltip>
@@ -94,6 +93,10 @@ function TopMenu({ open, toggleDrawer }) {
           <IconButton
             color='inherit'
             onClick={handleLogout}
+            sx={{
+              minHeight: 50,
+              minWidth: 50
+            }}
           >
             <LogoutIcon />
           </IconButton>

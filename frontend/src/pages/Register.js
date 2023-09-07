@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { Link as RouterLink } from 'react-router-dom';
+import CircularProgress from '@mui/material/CircularProgress';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -12,8 +13,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Alert } from '@mui/material';
-import Api from '../services/api';
 import { useNavigate } from 'react-router-dom';
+import useAxiosApiFunction, { API } from '../hooks/useAxiosApiFunction';
 
 
 const validationSchema = yup.object({
@@ -39,6 +40,7 @@ const validationSchema = yup.object({
 
 
 function Register() {
+  const { response, error, loading, axiosFetch } = useAxiosApiFunction();
   const [message, setMessage] = useState({});
   const navigate = useNavigate();
   const formik = useFormik({
@@ -54,19 +56,23 @@ function Register() {
   });
 
   async function handleFormSubmit(values) {
-    const response = await Api.register({
+    const data = {
       first_name: values.firstName,
       last_name: values.lastName,
       email: values.email,
       password: values.password
-    }, [400]);
-    if (response?.status === 201) {
-      navigate('/', {replace: true});
-    } else if (response?.status === 400) {
-      setMessage({ status: 'error', text: Object.values(response.data)[0] });
     }
-    formik.setSubmitting(false)
+    axiosFetch(API.register, { data, skip: [400] });
   }
+
+  useEffect(() => {
+    if (response?.status === 201) {
+      navigate('/', { replace: true });
+    } else if (error?.status === 400) {
+      setMessage({ status: 'error', text: Object.values(error?.data)[0] });
+    }
+    // eslint-disable-next-line
+  }, [response, error]);
 
   return (
     <Container component='main' maxWidth='xs'>
@@ -78,9 +84,13 @@ function Register() {
           alignItems: 'center',
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          <LockOutlinedIcon />
-        </Avatar>
+        {
+          loading
+          ? <CircularProgress />
+          : <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+              <LockOutlinedIcon />
+            </Avatar>
+        }
         <Typography component='h1' variant='h5'>
           Регистрация
         </Typography>

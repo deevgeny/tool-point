@@ -8,7 +8,7 @@ const {
 } = process.env;
 const baseUrl = API_URL + API_PREFIX + API_VERSION;
 
-const axiosInstance = axios.create({
+const axiosApi = axios.create({
   baseURL: baseUrl,
   withCredentials: false,
   headers: {
@@ -24,7 +24,7 @@ const axiosRefresh = axios.create({
   },
 });
 
-axiosInstance.interceptors.request.use(
+axiosApi.interceptors.request.use(
   (config) => {
     const token = Token.getLocalAccessToken();
     if (token) {
@@ -32,26 +32,27 @@ axiosInstance.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  
+  error => Promise.reject(error)
 );
 
-axiosInstance.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+axiosApi.interceptors.response.use(
+  response => response,
+  
   async (error) => {
-    const prevRequest = error?.config;
-    if (error?.response?.status === 401 && !prevRequest?.sent) {
-      prevRequest.sent = true;
-      const data = JSON.stringify({ refresh: Token.getLocalRefreshToken() });
-      const response = await axiosRefresh.post("/jwt/refresh", data);
-      prevRequest.headers["Authorization"] = `Bearer ${response?.data.access}`;
-      Token.updateLocalAccessToken(response?.data.access);
-      return axiosInstance(prevRequest);
+    // Refresh access token if access token exists in local storage and refresh token is valid
+    if (Token.getLocalAccessToken() && Token.isLocalRefreshTokenValid()) {
+      const prevRequest = error?.config;
+      if (error?.response?.status === 401 && !prevRequest?.sent) {
+        prevRequest.sent = true;
+        const data = JSON.stringify({ refresh: Token.getLocalRefreshToken() });
+        const response = await axiosRefresh.post("/jwt/refresh", data);
+        prevRequest.headers["Authorization"] = `Bearer ${response?.data.access}`;
+        Token.updateLocalAccessToken(response?.data.access);
+        return axiosApi(prevRequest);
+      }
     }
     return Promise.reject(error);
   });
 
-export default axiosInstance;
+export default axiosApi;
