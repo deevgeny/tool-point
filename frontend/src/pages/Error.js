@@ -1,10 +1,6 @@
-import React from 'react';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import React from 'react'
 
-function NotFound() {
-
+function Error() {
   return (
     <Box
       component="main"
@@ -20,11 +16,11 @@ function NotFound() {
     > 
       <Container maxWidth="sx" sx={{ mt: 20, mb: 4 }}>
         <Typography variant='h3' textAlign={'center'}>
-          Страница не найдена
+          Ошибка {}
         </Typography>
       </Container>
     </Box>
-  );
+  )
 }
 
-export default NotFound;
+export default Error
