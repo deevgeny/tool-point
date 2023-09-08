@@ -6,7 +6,7 @@ const {
   REACT_APP_API_PREFIX: API_PREFIX,
   REACT_APP_API_VERSION: API_VERSION
 } = process.env;
-const baseUrl = API_URL + API_PREFIX + API_VERSION;
+const baseUrl = `${API_URL}${API_PREFIX}${API_VERSION}`;
 
 const axiosApi = axios.create({
   baseURL: baseUrl,

@@ -1,9 +1,9 @@
 import React from 'react';
-import useAuthContext from '../hooks/useAuthContext';
+import useAuth from '../hooks/useAuth';
 import { useLocation, Navigate, Outlet } from 'react-router-dom';
 
 function AnonymousOnly() {
-  const { auth } = useAuthContext();
+  const { auth } = useAuth();
   const location = useLocation();
   return (
     !auth?.role

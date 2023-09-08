@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -7,11 +7,12 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Token from '../services/token';
-import useAuthContext from '../hooks/useAuthContext';
+import useAuthContext from '../hooks/useAuth';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import useAxiosApiFunction, { API } from '../hooks/useAxiosApiFunction';
 import NoAccountsIcon from '@mui/icons-material/NoAccounts';
+import { useLocation } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -34,10 +35,12 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 
-function TopMenu({ open, toggleDrawer }) {
+function TopBar({ open, toggleDrawer }) {
   const { response, axiosFetch } = useAxiosApiFunction();
   const { setAuth } = useAuthContext();
-
+  const location = useLocation();
+  const [pageTitle, setPageTitle] = useState('');
+  const pathname = location.pathname;
   
   function handleLogout() {
     Token.clear();
@@ -49,6 +52,19 @@ function TopMenu({ open, toggleDrawer }) {
     
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    let newPageTitle = '';
+    switch (pathname) {
+      case '/':
+        newPageTitle = 'Главная'
+        break;
+      default:
+        break;
+    }
+    setPageTitle(newPageTitle);
+  }, [pathname])
+
 
   return (
     <AppBar position='absolute' open={open}>
@@ -76,7 +92,7 @@ function TopMenu({ open, toggleDrawer }) {
           noWrap
           sx={{ flexGrow: 1 }}
         >
-          Dashboard
+          {pageTitle}
         </Typography>
         <Tooltip title={response?.data?.first_name ? 'Мой аккаунт': 'Нет данных'}>
           <IconButton color='inherit' size='small'>
@@ -106,4 +122,4 @@ function TopMenu({ open, toggleDrawer }) {
   )
 }
 
-export default TopMenu;
+export default TopBar;

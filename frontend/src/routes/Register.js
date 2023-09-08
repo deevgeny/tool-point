@@ -40,7 +40,7 @@ const validationSchema = yup.object({
 
 
 function Register() {
-  const { response, error, loading, axiosFetch } = useAxiosApiFunction();
+  const { response, loading, axiosFetch } = useAxiosApiFunction();
   const [message, setMessage] = useState({});
   const navigate = useNavigate();
   const formik = useFormik({
@@ -68,11 +68,11 @@ function Register() {
   useEffect(() => {
     if (response?.status === 201) {
       navigate('/', { replace: true });
-    } else if (error?.status === 400) {
-      setMessage({ status: 'error', text: Object.values(error?.data)[0] });
+    } else if (response?.status === 400) {
+      setMessage({ status: 'error', text: Object.values(response?.data)[0] });
     }
     // eslint-disable-next-line
-  }, [response, error]);
+  }, [response]);
 
   return (
     <Container component='main' maxWidth='xs'>

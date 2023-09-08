@@ -1,10 +1,10 @@
 import React from 'react';
-import useAuthContext from '../hooks/useAuthContext';
+import useAuth from '../hooks/useAuth';
 import { useLocation, Navigate, Outlet } from 'react-router-dom';
 
 
 function AuthorizedOnly({ allowedRoles }) {
-  const { auth } = useAuthContext();
+  const { auth } = useAuth();
   const location = useLocation();
   return (
     allowedRoles.includes(auth?.role)

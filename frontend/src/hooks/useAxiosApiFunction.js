@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axiosApi from '../api/axiosApi';
+import useError from './useError';
 
 export const API = {
   currentUserInfo: { method: 'get', url: '/users/me' },
@@ -9,17 +10,12 @@ export const API = {
 
 function useAxiosApiFunction() {
   const [response, setResponse] = useState({});
-  const [error, setError] = useState({});
   const [loading, setLoading] = useState(false);
   const [controller, setController] = useState();
+  const { error, setError } = useError();
 
   async function axiosFetch(fetchConfig, options={ data: {}, skip: [] }) {
-/*     const {
-      // axiosApi,
-      method,
-      url,
-      requestConfig = {}
-    } = fetchConfig; */
+
     try {
       setLoading(true);
       const ctrl = new AbortController();
@@ -33,10 +29,15 @@ function useAxiosApiFunction() {
     } catch (error) {
       // Return requested errors to component
       if (options.skip.includes(error?.response?.status)) {
-        setError(error.response);
+        setResponse(error.response);
+      } else if (error?.response) {
+        // Server error to ErrorContext
+        // ADD FEATURE:  Error handler for different `detail` structure
+        setError({status: error?.response.status, message: error?.response?.data?.detail});
       } else {
-        // Run error handler
-        //setError(error.response);
+        // Fetch error to ErrorContext
+        // ADD FEATURE:  Error handler for Axios Error
+        setError({ status: 500, message: error.message });
       }
     } finally {
       setLoading(false);
@@ -49,7 +50,7 @@ function useAxiosApiFunction() {
     return () => controller && controller.abort();
   }, [controller]);
 
-  return { response, error, loading, axiosFetch };
+  return { response, loading, axiosFetch };
 }
 
 export default useAxiosApiFunction;

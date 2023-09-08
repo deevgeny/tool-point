@@ -1,6 +1,8 @@
-import React from 'react'
+import React from 'react';
+import Box from '@mui/material/Box';
 
-function Error() {
+function ContentWrapper({ children }) {
+  // Used to wrap only page content (no Drawer/AppBar e.g. side/top menu )
   return (
     <Box
       component="main"
@@ -14,13 +16,9 @@ function Error() {
         overflow: 'auto',
       }}
     > 
-      <Container maxWidth="sx" sx={{ mt: 20, mb: 4 }}>
-        <Typography variant='h3' textAlign={'center'}>
-          Ошибка {}
-        </Typography>
-      </Container>
+      {children}
     </Box>
-  )
+  );
 }
 
-export default Error
+export default ContentWrapper;

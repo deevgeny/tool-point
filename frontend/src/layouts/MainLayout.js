@@ -1,13 +1,13 @@
 import React from 'react';
-import { Box } from '@mui/material';
+import Box from '@mui/material/Box';
 import { Outlet } from 'react-router-dom';
 
-function Layout() {
+function MainLayout() {
   return (
     <Box sx={{ display: 'flex' }}>
       <Outlet />
     </Box>
-  )
+  );
 }
 
-export default Layout
+export default MainLayout;
