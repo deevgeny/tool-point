@@ -7,6 +7,7 @@ import '@fontsource/roboto/700.css';
 import UserLayout from './layouts/UserLayout';
 import MainLayout from './layouts/MainLayout';
 import Home from './routes/Home';
+import Account from './routes/Account';
 import Login from './routes/Login';
 import Register from './routes/Register';
 import Unauthorized from './routes/Unauthorized';
@@ -32,6 +33,7 @@ function App() {
         <Route element={<AuthorizedOnly allowedRoles={[ROLES.User]} />}>
           <Route element={<UserLayout />}>
             <Route path='/' element={<Home />} />
+            <Route path='/account' element={<Account />} />
           </Route>
         </Route>
 

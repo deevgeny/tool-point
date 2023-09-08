@@ -12,7 +12,7 @@ import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import useAxiosApiFunction, { API } from '../hooks/useAxiosApiFunction';
 import NoAccountsIcon from '@mui/icons-material/NoAccounts';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -38,13 +38,19 @@ const AppBar = styled(MuiAppBar, {
 function TopBar({ open, toggleDrawer }) {
   const { response, axiosFetch } = useAxiosApiFunction();
   const { setAuth } = useAuthContext();
-  const location = useLocation();
   const [pageTitle, setPageTitle] = useState('');
+  const navigate = useNavigate();
+  const location = useLocation();
   const pathname = location.pathname;
   
   function handleLogout() {
     Token.clear();
     setAuth({});
+  }
+
+  function handleAccount() {
+    navigate('/account');
+
   }
 
   useEffect(() => {
@@ -95,7 +101,7 @@ function TopBar({ open, toggleDrawer }) {
           {pageTitle}
         </Typography>
         <Tooltip title={response?.data?.first_name ? 'Мой аккаунт': 'Нет данных'}>
-          <IconButton color='inherit' size='small'>
+          <IconButton color='inherit' size='small' onClick={handleAccount}>
             <Avatar>
               {
                 response?.data?.first_name
