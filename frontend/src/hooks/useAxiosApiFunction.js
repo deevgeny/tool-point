@@ -12,7 +12,7 @@ function useAxiosApiFunction() {
   const [response, setResponse] = useState({});
   const [loading, setLoading] = useState(false);
   const [controller, setController] = useState();
-  const { error, setError } = useError();
+  const { setError } = useError();
 
   async function axiosFetch(fetchConfig, options={ data: {}, skip: [] }) {
 

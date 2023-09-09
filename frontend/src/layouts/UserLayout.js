@@ -8,7 +8,7 @@ import ErrorDialog from '../components/ErrorDialog';
 
 
 function UserLayout() {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   
   function toggleDrawer() {
     setOpen(!open);

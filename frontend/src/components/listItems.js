@@ -12,20 +12,25 @@ import WarehouseIcon from '@mui/icons-material/Warehouse';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import AutoAwesomeMotionIcon from '@mui/icons-material/AutoAwesomeMotion';
 import LayersIcon from '@mui/icons-material/Layers';
+import Tooltip from '@mui/material/Tooltip';
 
-
+const placement = 'right'
 export const mainListItems = (
   <React.Fragment>
-    <ListItemButton>
+    <ListItemButton href='/'>
+      <Tooltip title='Главная' placement={placement}>
       <ListItemIcon>
         <DashboardIcon />
       </ListItemIcon>
+      </Tooltip>
       <ListItemText primary="Главная" />
     </ListItemButton>
     <ListItemButton>
+      <Tooltip title='Клиенты' placement={placement}>
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>
+      </Tooltip>
       <ListItemText primary="Клиенты" />
     </ListItemButton>
     <ListItemButton>
