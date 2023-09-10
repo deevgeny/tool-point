@@ -1,10 +1,24 @@
-import React from 'react';
-import {
-  Card, CardHeader, Avatar, CardMedia, CardContent, CardActions, Box, Typography, Button
-} from '@mui/material';
+import React, { useEffect } from 'react';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardMedia from '@mui/material/CardMedia';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import useAxiosApiFunction, { API } from '../hooks/useAxiosApiFunction';
 
 
 function UserCard() {
+  const { response, loading, axiosFetch } = useAxiosApiFunction();
+
+  useEffect(() => {
+    axiosFetch(API.currentUserInfo);
+
+    // eslint-disable-next-line
+  }, []);
+
+
   return (
     <Card>
       <CardHeader title='Мои данные' />
@@ -27,12 +41,21 @@ function UserCard() {
           justifyContent: 'flex-start',
           minHeight: '150px',
         }}>
-
-        <Typography variant='body1'>Имя</Typography>
-        <Typography variant='body1'>Отчество</Typography>
-        <Typography variant='body1'>Фамилия</Typography>
-        <Typography variant='body2' color='text.secondary'>Личная почта</Typography>
-        <Typography variant='body2' color='text.secondary'>Личный телефон</Typography>
+        <Typography variant='body1'>
+          {response?.data ? response.data.first_name : 'Нет данных'}
+        </Typography>
+        <Typography variant='body1'>
+          Отчество
+        </Typography>
+        <Typography variant='body1'>
+          {response?.data ? response.data.last_name : 'Нет данных'}
+        </Typography>
+        <Typography variant='body2' color='text.secondary'>
+          {response?.data ? response.data.email : 'Нет данных'}
+        </Typography>
+        <Typography variant='body2' color='text.secondary'>
+          Телефон
+        </Typography>
       </CardContent>
       <CardActions>
         <Button size='small'>Редактировать</Button>

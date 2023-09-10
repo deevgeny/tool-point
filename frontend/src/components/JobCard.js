@@ -18,8 +18,6 @@ function JobCard() {
         <Typography variant='body1'>Подразделение</Typography>
         <Typography variant='body1'>Отдел</Typography>
         <Typography variant='body1'>Должность</Typography>
-        <Typography variant='body2' color='text.secondary'>Рабочая почта</Typography>
-        <Typography variant='body2' color='text.secondary'>Рабочий телефон</Typography>
       </CardContent>
       <CardActions>
         <Button size='small'>Войти</Button>
