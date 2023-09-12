@@ -35,7 +35,7 @@ const validationSchema = yup.object({
   retypePassword: yup
     .string('Укажите пароль')
     .required('Обязательное поле')
-    .oneOf([yup.ref('password')], 'Указанный пароль не совпадает')
+    .oneOf([yup.ref('password')], 'Пароли не совпадают')
 });
 
 

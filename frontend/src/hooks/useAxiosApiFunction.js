@@ -7,6 +7,7 @@ export const API = {
   login: { method: 'post', url: '/jwt/create' },
   register: { method: 'post', url: '/users' },
   editUserInfo: { method: 'patch', url: '/users/me' },
+  changePassword: { method: 'patch', url: '/users/change-password' },
 };
 
 function useAxiosApiFunction() {

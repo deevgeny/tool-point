@@ -1,16 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
+import Alert from '@mui/material/Alert';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import useAxiosApiFunction, { API } from '../hooks/useAxiosApiFunction';
 
 
 const validationSchema = yup.object({
-  currentPassword: yup
-    .string('Укажите текущий пароль')
-    .required('Обязательное поле'),
   newPassword: yup
     .string('Укажите новый пароль')
     .min(8, 'Длина пароля должна быть не менее 8 символов')
@@ -19,20 +18,35 @@ const validationSchema = yup.object({
     .string('Повторите новый пароль')
     .min(8, 'Длина пароля должна быть не менее 8 символов')
     .required('Обязательное поле')
-    .oneOf([yup.ref('newPassword')], 'Указанный пароль не совпадает'),
+    .oneOf([yup.ref('newPassword')], 'Пароли не совпадают'),
 });
 
 
 function UserPasswordChangeForm() {
+  const { response, loading, axiosFetch } = useAxiosApiFunction();
+  const [message, setMessage] = useState({});
   const formik = useFormik({
     initialValues: {
-      currentPassword: '',
       newPassword: '',
       retypeNewPassword: '',
     },
     validationSchema: validationSchema,
-    onSubmit: () => { }
+    onSubmit: handleFormSubmit
   });
+
+  function handleFormSubmit(value) {
+    const data = {
+      new_password: value.newPassword,
+      re_password: value.retypeNewPassword
+    }
+    axiosFetch(API.changePassword, { data });
+  }
+
+  useEffect(() => {
+    if (response?.status === 200) {
+      setMessage({ status: 'success', text: 'Пароль успешно обновлен' });
+    }
+  }, [response]);
 
   return (
     <Box
@@ -53,23 +67,8 @@ function UserPasswordChangeForm() {
           margin='normal'
           required
           fullWidth
-          id='currentPassword'
-          name='currentPassword'
-          type='password'
-          label='Текущий пароль'
-          /* autoFocus */
-          value={formik.values.currentPassword}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.currentPassword && Boolean(formik.errors.currentPassword)}
-          helperText={formik.touched.currentPassword && formik.errors.currentPassword}
-        />
-        <TextField
-          margin='normal'
-          required
-          fullWidth
           id='newPassword'
-          name='password'
+          name='newPassword'
           type='password'
           label='Новый пароль'
           value={formik.values.newPassword}
@@ -82,17 +81,17 @@ function UserPasswordChangeForm() {
           margin='normal'
           required
           fullWidth
-          name='password'
+          id='retypeNewPassword'
+          name='retypeNewPassword'
           label='Повторить новый пароль'
           type='password'
-          id='retypeNewPassword'
           value={formik.values.retypeNewPassword}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           error={formik.touched.retypeNewPassword && Boolean(formik.errors.retypeNewPassword)}
           helperText={formik.touched.retypeNewPassword && formik.errors.retypeNewPassword}
         />
-        {/* {message?.status && <Alert severity={message.status}>{message.text}</Alert>} */}
+        {message?.status && <Alert severity={message.status}>{message.text}</Alert>}
         <Button
           type='submit'
           variant='contained'

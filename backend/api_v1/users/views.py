@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from .serializers import (
+    UserChangePasswordSerializer,
     UserCreateSerializer,
     UserEditSerializer,
     UserReadSerializer,
@@ -38,14 +39,24 @@ class UserAccountView(GenericViewSet, CreateModelMixin):
             permission_classes=[IsAuthenticated])
     def me(self, request):
         """Get or update user data."""
-        if request.method == 'PATCH':
-            user_instance = get_object_or_404(User, id=request.user.id)
-            serializer = self.get_serializer_class()(
-                user_instance, data=request.data, partial=True
-            )
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
+        if request.method == 'GET':
+            serializer = UserReadSerializer(request.user)
             return Response(serializer.data)
-        # GET request
-        serializer = self.get_serializer_class()(request.user)
+        # PATCH request
+        user = get_object_or_404(User, id=request.user.id)
+        serializer = UserEditSerializer(user, data=request.data,
+                                        partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+    @action(methods=['PATCH'], detail=False, url_path='change-password',
+            permission_classes=[IsAuthenticated])
+    def change_password(self, request):
+        """Change user password."""
+        user = get_object_or_404(User, id=request.user.id)
+        serializer = UserChangePasswordSerializer(user, data=request.data,
+                                                  partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
         return Response(serializer.data)
