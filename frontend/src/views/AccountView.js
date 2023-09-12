@@ -2,9 +2,9 @@ import React from 'react';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import UserCard from '../components/UserCard';
-import JobCard from '../components/JobCard';
+import UserJobCard from '../components/UserJobCard';
 
-function Account() {
+function AccountView() {
   return (
     <Container maxWidth='lg' sx={{ mt: 4, mb: 4 }}>
       <Grid
@@ -17,11 +17,11 @@ function Account() {
           <UserCard/>
         </Grid>
         <Grid item xs={12} sm={8} md={6} lg={4}>
-          <JobCard/>
+          <UserJobCard/>
         </Grid>
       </Grid>
     </Container>
   );
 }
 
-export default Account;
+export default AccountView;

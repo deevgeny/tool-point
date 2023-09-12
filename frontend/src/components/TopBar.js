@@ -66,7 +66,11 @@ function TopBar({ open, toggleDrawer }) {
         newPageTitle = 'Главная'
         break;
       case '/account':
-        newPageTitle = 'Личный кабинет'
+        newPageTitle = 'Мой аккаунт'
+        break;
+      case '/account/user':
+        newPageTitle = 'Мой аккаунт - личные данные'
+        break;
       default:
         break;
     }
@@ -102,7 +106,7 @@ function TopBar({ open, toggleDrawer }) {
         >
           {pageTitle}
         </Typography>
-        <Tooltip title={response?.data?.first_name ? 'Личный кабинет': 'Нет данных'}>
+        <Tooltip title='Мой аккаунт'>
           <IconButton color='inherit' size='small' onClick={handleAccount}>
             <Avatar>
               {

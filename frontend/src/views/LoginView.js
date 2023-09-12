@@ -30,7 +30,7 @@ const validationSchema = yup.object({
     .required('Обязательное поле'),
 });
 
-function Login() {
+function LoginView() {
   const { response, loading, axiosFetch } = useAxiosApiFunction();
   const { setAuth } = useAuth();
   const [message, setMessage] = useState({});
@@ -60,9 +60,15 @@ function Login() {
       Token.updateLocalRefreshToken(response.data.refresh);
       navigate('/', { replace: true });
     } else if (response?.status === 401) {
-      setMessage({ status: 'error', text: 'Неверный адрес электронной почты или пароль!' });
+      setMessage({
+        status: 'error',
+        text: 'Неверный адрес электронной почты или пароль!'
+      });
     } else if (response?.status === 400) {
-      setMessage({ status: 'error', text: 'Не указаны электронная почта или пароль!' });
+      setMessage({
+        status: 'error',
+        text: 'Не указаны электронная почта или пароль!'
+      });
     }
     // formik.setSubmitting(false);
     
@@ -147,4 +153,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default LoginView;

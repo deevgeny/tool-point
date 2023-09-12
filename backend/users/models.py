@@ -1,7 +1,24 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
+from django.core.validators import MinLengthValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+
+def phone_is_digit(value):
+    """Phone number is digit validator."""
+    if not value.isdigit():
+        raise ValidationError(
+            ('Номер телефона может состоять только из цифр.'),
+            params={'value': value},
+        )
+
+
+def profile_photo(instance, filename):
+    """Return path to save user profile photo and rename uploaded file."""
+    new_filename = f'{instance.id}-{instance.role}.{filename.split(".")[-1]}'
+    return f'profile-photo/{new_filename}'
 
 
 class UserManager(BaseUserManager):
@@ -51,14 +68,29 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
     username = None
-    email = models.EmailField(_("email address"), unique=True)
-    first_name = models.CharField(_("first name"), max_length=150)
-    last_name = models.CharField(_("last name"), max_length=150)
+    email = models.EmailField(_('email address'), unique=True)
+    first_name = models.CharField(_('first name'), max_length=150)
+    middle_name = models.CharField('Отчество', max_length=32, blank=True)
+    last_name = models.CharField(_('last name'), max_length=150)
     role = models.CharField(
         verbose_name='Роль',
         max_length=16,
         choices=Role.choices,
         default=Role.USER,
+    )
+    phone = models.CharField(
+        verbose_name='Телефон',
+        max_length=10,
+        blank=True,
+        validators=[phone_is_digit,
+                    MinLengthValidator(limit_value=10,
+                                       message=('В номере телефона должно быть'
+                                                ' не менее 10-ти цифр.'))]
+    )
+    photo = models.ImageField(
+        verbose_name='Фото пользователя',
+        upload_to=profile_photo,
+        blank=True
     )
 
     objects = UserManager()

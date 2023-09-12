@@ -1,13 +1,16 @@
 import React from 'react';
-import {
-  Card, CardHeader, CardContent, CardActions, Box, Typography, Button
-} from '@mui/material';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 
 
-function JobCard() {
+function UserJobCard() {
   return (
     <Card>
-      <CardHeader title='Моя работа' />
+      <CardHeader title='Работа' />
       <CardContent
         sx={{
           display: 'flex',
@@ -26,4 +29,4 @@ function JobCard() {
   );
 }
 
-export default JobCard;
+export default UserJobCard;

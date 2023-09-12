@@ -3,17 +3,16 @@ import Typography from '@mui/material/Typography';
 import ContentWrapper from '../UI/wrappers/ContentWrapper';
 import ErrorWrapper from '../UI/wrappers/ErrorWrapper';
 
-function NotFound() {
-  // NotFound route
+function UnauthorizedView() {
   return (
     <ContentWrapper>
       <ErrorWrapper>
-        <Typography variant='h4' textAlign={'center'}>
-          Страница не найдена
+        <Typography variant='h3' textAlign={'center'}>
+          Недостаточно прав доступа
         </Typography>
-    </ErrorWrapper>
-  </ContentWrapper>
+      </ErrorWrapper>
+    </ContentWrapper>
   );
 }
 
-export default NotFound;
+export default UnauthorizedView;

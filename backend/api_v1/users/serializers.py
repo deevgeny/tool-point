@@ -11,9 +11,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def get_token(cls, user):
         """Add user role to token payload."""
         token = super().get_token(user)
-
         token['role'] = user.role
-
         return token
 
 
@@ -21,7 +19,8 @@ class UserReadSerializer(ModelSerializer):
     """Read user data."""
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'email', 'role']
+        fields = ['id', 'first_name', 'middle_name', 'last_name', 'email',
+                  'role', 'phone', 'photo']
 
 
 class UserCreateSerializer(ModelSerializer):
@@ -29,22 +28,17 @@ class UserCreateSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email', 'password']
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        """Custom create method to correctly save password (hash)."""
+        return User.objects.create_user(**validated_data)
 
 
 class UserEditSerializer(ModelSerializer):
-    """Edit user data by account owner."""
+    """Edit user data by account owner.
+
+    Note: photo update not implemented yet."""
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'email', 'password']
-
-    def update(self, instance, validated_data):
-        """Override update method to correctly save hashed password."""
-        instance.first_name = validated_data.get('first_name',
-                                                 instance.first_name)
-        instance.last_name = validated_data.get('last_name',
-                                                instance.last_name)
-        instance.email = validated_data.get('email', instance.email)
-        if validated_data.get('password'):
-            instance.set_password(validated_data.get('password'))
-        instance.save()
-        return instance
+        fields = ['first_name', 'middle_name', 'last_name', 'email', 'phone']

@@ -6,6 +6,7 @@ export const API = {
   currentUserInfo: { method: 'get', url: '/users/me' },
   login: { method: 'post', url: '/jwt/create' },
   register: { method: 'post', url: '/users' },
+  editUserInfo: { method: 'patch', url: '/users/me' },
 };
 
 function useAxiosApiFunction() {
@@ -28,7 +29,7 @@ function useAxiosApiFunction() {
       setResponse(res);
     } catch (error) {
       // Return requested errors to component
-      if (options.skip.includes(error?.response?.status)) {
+      if (options?.skip?.includes(error?.response?.status)) {
         setResponse(error.response);
       } else if (error?.response) {
         // Server error to ErrorContext

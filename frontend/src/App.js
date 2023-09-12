@@ -4,14 +4,15 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-import UserLayout from './layouts/UserLayout';
 import MainLayout from './layouts/MainLayout';
-import Home from './routes/Home';
-import Account from './routes/Account';
-import Login from './routes/Login';
-import Register from './routes/Register';
-import Unauthorized from './routes/Unauthorized';
-import NotFound from './routes/NotFound';
+import HomeLayout from './layouts/HomeLayout';
+import HomeView from './views/HomeView';
+import AccountView from './views/AccountView';
+import LoginView from './views/LoginView';
+import RegisterView from './views/RegisterView';
+import UnauthorizedView from './views/UnauthorizedView';
+import UserAccountView from './views/UserAccountView';
+import NotFoundView from './views/NotFoundView';
 import AuthorizedOnly from './permissions/AuthorizedOnly';
 import AnonymousOnly from './permissions/AnonymousOnly';
 
@@ -25,20 +26,21 @@ function App() {
       <Route path='/' element={<MainLayout />}>
         {/* Only for anonymous users */}
         <Route element={<AnonymousOnly />}>
-          <Route path='login' element={<Login />} />
-          <Route path='register' element={<Register />} />
+          <Route path='login' element={<LoginView />} />
+          <Route path='register' element={<RegisterView />} />
         </Route>
         
         {/* Protected routes */}
         <Route element={<AuthorizedOnly allowedRoles={[ROLES.User]} />}>
-          <Route element={<UserLayout />}>
-            <Route path='/' element={<Home />} />
-            <Route path='/account' element={<Account />} />
+          <Route element={<HomeLayout />}>
+            <Route path='/' element={<HomeView />} />
+            <Route path='/account' element={<AccountView />} />
+            <Route path='/account/user' element={<UserAccountView />} />
           </Route>
         </Route>
 
-        <Route path='unauthorized' element={<Unauthorized />} />
-        <Route path='*' element={<NotFound />} />
+        <Route path='unauthorized' element={<UnauthorizedView />} />
+        <Route path='*' element={<NotFoundView />} />
       </Route>
     </Routes>
   );

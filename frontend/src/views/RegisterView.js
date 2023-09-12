@@ -25,8 +25,8 @@ const validationSchema = yup.object({
     .string('Укажите фамилию')
     .required('Обязательное поле'),
   email: yup
-    .string('Укажите электронную почту')
-    .email('Неверный формат электронной почты')
+    .string('Укажите адрес электронной почты')
+    .email('Неверный формат адреса электронной почты')
     .required('Обязательное поле'),
   password: yup
     .string('Укажите пароль')
@@ -39,7 +39,7 @@ const validationSchema = yup.object({
 });
 
 
-function Register() {
+function RegisterView() {
   const { response, loading, axiosFetch } = useAxiosApiFunction();
   const [message, setMessage] = useState({});
   const navigate = useNavigate();
@@ -200,4 +200,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default RegisterView;

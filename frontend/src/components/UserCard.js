@@ -5,7 +5,9 @@ import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
+import CircularProgress from '@mui/material/CircularProgress';
 import Button from '@mui/material/Button';
+import { Link as RouterLink } from 'react-router-dom';
 import useAxiosApiFunction, { API } from '../hooks/useAxiosApiFunction';
 
 
@@ -18,13 +20,14 @@ function UserCard() {
     // eslint-disable-next-line
   }, []);
 
-
   return (
     <Card>
-      <CardHeader title='Мои данные' />
+      <CardHeader title='Личные данные' />
       <CardMedia
         component='img'
-        image='/images/blank-avatar.png'
+        image={response?.data?.photo
+          ? response?.data?.photo
+          : '/images/blank-avatar.png'}
         alt='My avatar'
         sx={{
           width: '100px',
@@ -40,26 +43,37 @@ function UserCard() {
           flexDirection: 'column',
           justifyContent: 'flex-start',
           minHeight: '150px',
-        }}>
-        <Typography variant='body1'>
-          {response?.data ? response.data.first_name : 'Нет данных'}
-        </Typography>
-        <Typography variant='body1'>
-          Отчество
-        </Typography>
-        <Typography variant='body1'>
-          {response?.data ? response.data.last_name : 'Нет данных'}
-        </Typography>
-        <Typography variant='body2' color='text.secondary'>
-          {response?.data ? response.data.email : 'Нет данных'}
-        </Typography>
-        <Typography variant='body2' color='text.secondary'>
-          Телефон
-        </Typography>
+        }}
+      >
+        {loading
+          ? <CircularProgress />
+          : <>
+              <Typography variant='body1'>
+                {response?.data?.first_name}
+              </Typography>
+              <Typography variant='body1'>
+                {response?.data?.middle_name}
+              </Typography>
+              <Typography variant='body1'>
+                {response?.data?.last_name}
+              </Typography>
+              <Typography variant='body2' color='text.secondary'>
+                {response?.data?.email}
+              </Typography>
+              <Typography variant='body2' color='text.secondary'>
+                {response?.data?.phone}
+              </Typography>
+             </>
+        }
       </CardContent>
       <CardActions>
-        <Button size='small'>Редактировать</Button>
-        <Button size='small'>Сменить пароль</Button>
+        <Button
+          size='small'
+          to='/account/user'
+          component={RouterLink}
+        >
+          Редактировать
+        </Button>
       </CardActions>
     </Card>
   );
