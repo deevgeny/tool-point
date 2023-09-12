@@ -72,16 +72,19 @@ function UserEditForm() {
   }, []);
   
   useEffect(() => {
-    // When form was submitted and response is OK send message to user
-    if (formik.isSubmitting && response?.status === 200) {
+    if (!formik.isSubmitting && response?.status === 200) {
+      // Update form with current user data
+      formik.initialValues.firstName = response?.data?.first_name || ''
+      formik.initialValues.middleName = response?.data?.middle_name || ''
+      formik.initialValues.lastName = response?.data?.last_name || ''
+      formik.initialValues.email = response?.data?.email || ''
+      formik.initialValues.phone = response?.data?.phone || ''
+      setMessage({}); // Set message to trigger re-render
+    } else if (formik.isSubmitting && response?.status === 200) {
+      // When form was submitted and response is OK send message to user
       formik.setSubmitting(false);
-      setMessage({status: 'success', text: 'Данные обновлены'})
+      setMessage({ status: 'success', text: 'Данные успешно обновлены' })
     }
-    formik.initialValues.firstName = response?.data?.first_name || ''
-    formik.initialValues.middleName = response?.data?.middle_name || ''
-    formik.initialValues.lastName = response?.data?.last_name || ''
-    formik.initialValues.email = response?.data?.email || ''
-    formik.initialValues.phone = response?.data?.phone || ''
     // eslint-disable-next-line
   }, [response]);
 
