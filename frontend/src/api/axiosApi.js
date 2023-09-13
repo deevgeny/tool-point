@@ -46,7 +46,7 @@ axiosApi.interceptors.response.use(
       if (error?.response?.status === 401 && !prevRequest?.sent) {
         prevRequest.sent = true;
         const data = JSON.stringify({ refresh: Token.getLocalRefreshToken() });
-        const response = await axiosRefresh.post("/jwt/refresh", data);
+        const response = await axiosRefresh.post("/auth/token/refresh", data);
         prevRequest.headers["Authorization"] = `Bearer ${response?.data.access}`;
         Token.updateLocalAccessToken(response?.data.access);
         return axiosApi(prevRequest);

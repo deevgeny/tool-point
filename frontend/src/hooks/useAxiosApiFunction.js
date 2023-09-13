@@ -4,7 +4,7 @@ import useError from './useError';
 
 export const API = {
   currentUserInfo: { method: 'get', url: '/users/me' },
-  login: { method: 'post', url: '/jwt/create' },
+  login: { method: 'post', url: '/auth/token/obtain' },
   register: { method: 'post', url: '/users' },
   editUserInfo: { method: 'patch', url: '/users/me' },
   changePassword: { method: 'patch', url: '/users/change-password' },
