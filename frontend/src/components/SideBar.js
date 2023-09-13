@@ -18,8 +18,8 @@ import LayersIcon from '@mui/icons-material/Layers';
 import Tooltip from '@mui/material/Tooltip';
 import { useNavigate } from 'react-router-dom';
 import { secondaryListItems } from './listItems';
+import { drawerWidth } from '../utils/constants'; 
 
-const drawerWidth = 240;
 
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({

@@ -10,11 +10,12 @@ import Token from '../services/token';
 import useAuthContext from '../hooks/useAuth';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
-import useAxiosApiFunction, { API } from '../hooks/useAxiosApiFunction';
 import NoAccountsIcon from '@mui/icons-material/NoAccounts';
 import { useLocation, useNavigate } from 'react-router-dom';
+import useAxiosApiFunction, { API } from '../hooks/useAxiosApiFunction';
+import { get_page_title } from '../utils/title';
+import { drawerWidth } from '../utils/constants';
 
-const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -60,21 +61,7 @@ function TopBar({ open, toggleDrawer }) {
   }, []);
 
   useEffect(() => {
-    let newPageTitle = '';
-    switch (pathname) {
-      case '/':
-        newPageTitle = 'Главная'
-        break;
-      case '/account':
-        newPageTitle = 'Мой аккаунт'
-        break;
-      case '/account/user':
-        newPageTitle = 'Мой аккаунт - личные данные'
-        break;
-      default:
-        break;
-    }
-    setPageTitle(newPageTitle);
+    setPageTitle(get_page_title(pathname));
   }, [pathname])
 
 
