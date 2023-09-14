@@ -51,6 +51,8 @@ axiosApi.interceptors.response.use(
         Token.updateLocalAccessToken(response?.data.access);
         return axiosApi(prevRequest);
       }
+    } else {
+      Token.clear();
     }
     return Promise.reject(error);
   });

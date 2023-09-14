@@ -129,9 +129,8 @@ function LoginView() {
           {message?.status && <Alert severity={message.status}>{message.text}</Alert>}
           <Button
             type='submit'
-            fullWidth
             variant='contained'
-            sx={{ mt: 3, mb: 2 }}
+            sx={{ mt: 3, mb: 2, display: 'block', marginX: 'auto' }}
           >
             Войти
           </Button>

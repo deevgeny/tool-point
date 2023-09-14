@@ -67,8 +67,15 @@ function RegisterView() {
 
   useEffect(() => {
     if (response?.status === 201) {
-      navigate('/', { replace: true });
+      setMessage({
+        status: 'success',
+        text: ['Поздравляем с успешной регистрацией! Через несколько секунд вы будете перенаправлены на страницу авторизации.']
+      });
+      setTimeout(() => {
+        navigate('/', { replace: true });
+      }, 5000);
     } else if (response?.status === 400) {
+      console.log(Object.values(response?.data))
       setMessage({ status: 'error', text: Object.values(response?.data)[0] });
     }
     // eslint-disable-next-line
@@ -177,13 +184,11 @@ function RegisterView() {
               />
             </Grid>
           </Grid>
-          
           {message?.status && message.text.map((item, id) => <Alert severity={message.status} key={id}>{item}</Alert>)}    
           <Button
             type='submit'
-            fullWidth
             variant='contained'
-            sx={{ mt: 3, mb: 2 }}
+            sx={{ mt: 3, mb: 2, display: 'block', marginX: 'auto' }}
           >
             Зарегистрироваться
           </Button>
