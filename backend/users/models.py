@@ -70,16 +70,16 @@ class User(AbstractUser):
     username = None
     email = models.EmailField(_('email address'), unique=True)
     first_name = models.CharField(_('first name'), max_length=150)
-    middle_name = models.CharField('Отчество', max_length=32, blank=True)
+    middle_name = models.CharField('отчество', max_length=32, blank=True)
     last_name = models.CharField(_('last name'), max_length=150)
     role = models.CharField(
-        verbose_name='Роль',
+        verbose_name='роль',
         max_length=16,
         choices=Role.choices,
         default=Role.USER,
     )
     phone = models.CharField(
-        verbose_name='Телефон',
+        verbose_name='телефон',
         max_length=10,
         blank=True,
         validators=[phone_is_digit,
@@ -88,7 +88,7 @@ class User(AbstractUser):
                                                 ' не менее 10-ти цифр.'))]
     )
     photo = models.ImageField(
-        verbose_name='Фото пользователя',
+        verbose_name='фото пользователя',
         upload_to=profile_photo,
         blank=True
     )

@@ -52,6 +52,7 @@ axiosApi.interceptors.response.use(
         return axiosApi(prevRequest);
       }
     } else {
+      // Remove tokens from storage when both are expired
       Token.clear();
     }
     return Promise.reject(error);

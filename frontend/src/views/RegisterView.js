@@ -180,7 +180,6 @@ function RegisterView() {
                 onBlur={formik.handleBlur}
                 error={formik.touched.retypePassword && Boolean(formik.errors.retypePassword)}
                 helperText={formik.touched.retypePassword && formik.errors.retypePassword}
-
               />
             </Grid>
           </Grid>
