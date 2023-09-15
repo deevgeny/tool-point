@@ -2,8 +2,11 @@ from itertools import zip_longest
 
 import pytest
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.db import models
+
+from users.models import phone_is_digit, profile_photo
 
 User = get_user_model()
 
@@ -122,15 +125,33 @@ def test_photo_field(field_attr, value):
 
 
 def test_photo_field_upload_to_attr():
-    ...
+    field = 'photo'
+    assert User._meta.get_field(field).upload_to.__name__ == 'profile_photo', (
+        f'User.{field}.upload_to should be profile_photo() function.'
+    )
 
 
 def test_profile_photo_func():
-    ...
+    user = User()
+    user.id = 1
+    filename = 'photo.png'
+    result = profile_photo(user, filename)
+    assert result == 'profile-photo/1-USER.png', (
+        'Incorrect path and filename from profile_photo() function'
+    )
 
 
 def test_phone_is_digit_func():
-    ...
+    try:
+        assert phone_is_digit('12345') is None
+    except ValidationError:
+        assert False, 'Custom validator function should not raise error'
+
+    try:
+        assert phone_is_digit('abc123') is None
+        assert False, 'Custom validator function should raise error'
+    except ValidationError:
+        pass
 
 
 def test_user_model_login_field():
