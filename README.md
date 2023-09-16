@@ -1,6 +1,6 @@
 # Tool Point
 
-Tool point - all-in-one platform with comprehensive tools for employee self-service portal.
+All-in-one platform with comprehensive tools for employee self-service portal.
 
 ![Tests](https://github.com/deevgeny/tool-point/actions/workflows/tests-workflow.yaml/badge.svg)
 ![Build](https://github.com/deevgeny/tool-point/actions/workflows/build-workflow.yaml/badge.svg)

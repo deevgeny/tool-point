@@ -8,6 +8,9 @@ from django.db import models
 
 from users.models import phone_is_digit, profile_photo
 
+pytestmark = pytest.mark.unit
+
+
 User = get_user_model()
 
 
@@ -132,23 +135,28 @@ def test_photo_field_upload_to_attr():
 
 
 def test_profile_photo_func():
+    # Arrange
     user = User()
     user.id = 1
     filename = 'photo.png'
+    # Act
     result = profile_photo(user, filename)
+    # Assert
     assert result == 'profile-photo/1-USER.png', (
         'Incorrect path and filename from profile_photo() function'
     )
 
 
 def test_phone_is_digit_func():
+    correct_phone = '9605554422'
+    incorrect_phone = 'x9605554422'
     try:
-        assert phone_is_digit('12345') is None
+        phone_is_digit(correct_phone)
     except ValidationError:
         assert False, 'Custom validator function should not raise error'
 
     try:
-        assert phone_is_digit('abc123') is None
+        phone_is_digit(incorrect_phone)
         assert False, 'Custom validator function should raise error'
     except ValidationError:
         pass

@@ -1,8 +1,6 @@
-import sys
-
-sys.dont_write_bytecode = True
+import pytest
 
 pytest_plugins = [
-    'tests.fixtures.fixture_users',
-    'tests.fixtures.fixture_api_clients'
+    'tests.fixtures.users',
+    'tests.fixtures.api'
 ]
