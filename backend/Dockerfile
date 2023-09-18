@@ -12,6 +12,7 @@ RUN pip install -r requirements.txt --no-cache-dir --disable-pip-version-check
 COPY config/ config/
 COPY users/ users/
 COPY api_v1/ api_v1/
+COPY docs/ docs/
 COPY manage.py .
 COPY docker-entrypoint.sh .
 RUN ["chmod", "+x", "./docker-entrypoint.sh"]

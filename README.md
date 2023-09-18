@@ -14,3 +14,7 @@ All-in-one platform with comprehensive tools for employee self-service portal.
 - React 18.2
 - Material UI 5.14.6
 - Docker
+
+## API docs
+
+[Swagger](http://194.87.98.159/docs/swagger)
