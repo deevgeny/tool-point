@@ -7,15 +7,26 @@ from tests.api_v1 import urls
 User = get_user_model()
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture()
 def api_client():
     client = APIClient()
     return client
 
 
 @pytest.fixture
-def tokens(user, api_client):
+def api_v1_tokens(user, api_client):
     user_obj, pwd = user
     data = {'email': user_obj.email, 'password': pwd}
     response = api_client.post(urls.TOKEN_OBTAIN, data=data)
     return response.data.get('access'), response.data.get('refresh')
+
+
+@pytest.fixture
+def api_v1_user_client(api_client, user):
+    user_obj, pwd = user
+    data = {'email': user_obj.email, 'password': pwd}
+    response = api_client.post(urls.TOKEN_OBTAIN, data=data)
+    api_client.credentials(
+        HTTP_AUTHORIZATION=f'Bearer {response.data.get("access")}'
+        )
+    return api_client, user_obj

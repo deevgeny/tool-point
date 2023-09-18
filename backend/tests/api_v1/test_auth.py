@@ -1,3 +1,4 @@
+import jwt
 import pytest
 from rest_framework import status
 
@@ -25,8 +26,8 @@ def test_token_obtain(api_client, user):
     assert 'refresh' in response.data, 'No refresh token in response data'
 
 
-def test_token_refresh(api_client, tokens):
-    _, refresh = tokens
+def test_token_refresh(api_client, api_v1_tokens):
+    _, refresh = api_v1_tokens
     data_key = 'access'
     response = api_client.post(urls.TOKEN_REFRESH, data={'refresh': refresh})
     assert response.status_code == status.HTTP_200_OK, (
@@ -37,21 +38,34 @@ def test_token_refresh(api_client, tokens):
     )
 
 
-def test_token_verify(api_client, tokens):
-    access, refresh = tokens
+def test_token_verify(api_client, api_v1_tokens):
+    access, refresh = api_v1_tokens
     response = api_client.post(urls.TOKEN_VERIFY, data={'token': access})
     assert response.status_code == status.HTTP_200_OK, (
-        f'{urls.TOKEN_VERIFY}: incorrect status for successfull access token verify'
+        f'{urls.TOKEN_VERIFY}: incorrect status for successfull access token '
+        'verify'
     )
     response = api_client.post(urls.TOKEN_VERIFY, data={'token': refresh})
     assert response.status_code == status.HTTP_200_OK, (
-        f'{urls.TOKEN_VERIFY}: incorrect status for successfull refresh token verify'
+        f'{urls.TOKEN_VERIFY}: incorrect status for successfull refresh token '
+        'verify'
     )
     response = api_client.post(urls.TOKEN_VERIFY, data={'token': access[:-1]})
     assert response.status_code == status.HTTP_401_UNAUTHORIZED, (
-        f'{urls.TOKEN_VERIFY}: incorrect status for access token verify failure'
+        f'{urls.TOKEN_VERIFY}: incorrect status for access token verify '
+        'failure'
     )
     response = api_client.post(urls.TOKEN_VERIFY, data={'token': refresh[:-1]})
     assert response.status_code == status.HTTP_401_UNAUTHORIZED, (
-        f'{urls.TOKEN_VERIFY}: incorrect status for refresh token verify failure'
+        f'{urls.TOKEN_VERIFY}: incorrect status for refresh token verify '
+        'failure'
+    )
+
+
+def test_access_token_payload(api_v1_tokens):
+    access, _ = api_v1_tokens
+    role = 'role'
+    decoded = jwt.decode(access, options={'verify_signature': False})
+    assert role in decoded, (
+        'JWT access token is missing `{role}` key in payload'
     )
