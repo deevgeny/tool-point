@@ -18,7 +18,6 @@ User = get_user_model()
 
 class UserAccountView(GenericViewSet, CreateModelMixin):
     """User account view.
-
     User actions:
         - Create new user (register): POST /
         - Get personal data at: GET /me
