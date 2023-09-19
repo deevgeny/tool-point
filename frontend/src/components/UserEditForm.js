@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import InputAdornment from '@mui/material/InputAdornment';
 import useAxiosApiFunction, { API } from '../hooks/useAxiosApiFunction';
 
 
@@ -64,6 +65,19 @@ function UserEditForm() {
       phone: values.phone
     };
     axiosFetch(API.editUserInfo, { data });
+  }
+
+  function tickMarkAdornment() {
+    return {
+      endAdornment: (
+        <InputAdornment
+          position="end"
+          sx={{ "& .MuiTypography-root": { color: "success.main" } }}
+        >
+          &#10004;
+        </InputAdornment>
+      )
+    }
   }
   
   useEffect(() => {
@@ -127,6 +141,7 @@ function UserEditForm() {
             onBlur={formik.handleBlur}
             error={formik.touched.firstName && Boolean(formik.errors.firstName)}
             helperText={formik.touched.firstName && formik.errors.firstName}
+            InputProps={formik.initialValues.firstName !== formik.values.firstName && tickMarkAdornment()}
           />
           <TextField
             margin='normal'
@@ -140,6 +155,7 @@ function UserEditForm() {
             onBlur={formik.handleBlur}
             error={formik.touched.middleName && Boolean(formik.errors.middleName)}
             helperText={formik.touched.middleName && formik.errors.middleName}
+            InputProps={formik.initialValues.middleName !== formik.values.middleName && tickMarkAdornment()}
           />
           <TextField
             margin='normal'
@@ -153,6 +169,7 @@ function UserEditForm() {
             onBlur={formik.handleBlur}
             error={formik.touched.lastName && Boolean(formik.errors.lastName)}
             helperText={formik.touched.lastName && formik.errors.lastName}
+            InputProps={formik.initialValues.lastName !== formik.values.lastName && tickMarkAdornment()}
           />
           <TextField
             margin='normal'
@@ -166,6 +183,7 @@ function UserEditForm() {
             onBlur={formik.handleBlur}
             error={formik.touched.email && Boolean(formik.errors.email)}
             helperText={formik.touched.email && formik.errors.email}
+            InputProps={formik.initialValues.email !== formik.values.email && tickMarkAdornment()}
           />
           <TextField
             margin='normal'
@@ -179,6 +197,7 @@ function UserEditForm() {
             onBlur={formik.handleBlur}
             error={formik.touched.phone && Boolean(formik.errors.phone)}
             helperText={formik.touched.phone && formik.errors.phone}
+            InputProps={formik.initialValues.phone !== formik.values.phone && tickMarkAdornment()}
           />
           {message?.status && <Alert severity={message.status}>{message.text}</Alert>}
           <Button

@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import { Container } from '@mui/material';
 
 function ContentWrapper({ children }) {
-  // Used to wrap only page content (no Drawer/AppBar e.g. side/top menu )
+  // Used to wrap only page content (no Drawer/AppBar e.g. side/top bar )
   return (
     <Box
       component="main"

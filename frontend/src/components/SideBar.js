@@ -56,7 +56,7 @@ function SideBar({ open, toggleDrawer }) {
   },[open]) 
 
   return (
-    <Drawer variant="permanent" open={open}>
+    <Drawer variant='permanent' open={open}>
       <Toolbar
         sx={{
           display: 'flex',
@@ -66,50 +66,60 @@ function SideBar({ open, toggleDrawer }) {
         }}
       >
       <IconButton onClick={toggleDrawer}>
+        <Tooltip title='Свернуть' placement='left'>
         <ChevronLeftIcon />
-          </IconButton>
-          </Toolbar>
-        <Divider />
-      <List component="nav">
+        </Tooltip>
+      </IconButton>
+      </Toolbar>
+      <Divider />
+      <List component='nav'>
         <ListItemButton onClick={() => navigate('/')}>
           <Tooltip title='Главная' placement={placement}>
-          <ListItemIcon>
-            <DashboardIcon />
-          </ListItemIcon>
+            <ListItemIcon>
+              <DashboardIcon />
+            </ListItemIcon>
           </Tooltip>
-          <ListItemText primary="Главная" />
+          <ListItemText primary='Главная' />
         </ListItemButton>
-        <ListItemButton>
+        <ListItemButton onClick={() => navigate('/clients')}>
           <Tooltip title='Клиенты' placement={placement}>
-          <ListItemIcon>
-            <PeopleIcon />
-          </ListItemIcon>
+            <ListItemIcon>
+              <PeopleIcon />
+            </ListItemIcon>
           </Tooltip>
-          <ListItemText primary="Клиенты" />
+          <ListItemText primary='Клиенты' />
         </ListItemButton>
-        <ListItemButton>
-          <ListItemIcon>
-            <LayersIcon />
-          </ListItemIcon>
-          <ListItemText primary="Продукты" />
+        <ListItemButton onClick={() => navigate('/products')}>
+          <Tooltip title='Продукты' placement={placement}>
+            <ListItemIcon>
+              <LayersIcon />
+            </ListItemIcon>
+          </Tooltip>
+          <ListItemText primary='Продукты' />
         </ListItemButton>
-        <ListItemButton>
-          <ListItemIcon>
-            <WarehouseIcon />
-          </ListItemIcon>
-          <ListItemText primary="Склад" />
+        <ListItemButton onClick={() => navigate('/stock')}>
+          <Tooltip title='Склад' placement={placement}>
+            <ListItemIcon>
+              <WarehouseIcon />
+            </ListItemIcon>
+          </Tooltip>
+          <ListItemText primary='Склад' />
         </ListItemButton>
-        <ListItemButton>
-          <ListItemIcon>
-            <BarChartIcon />
-          </ListItemIcon>
-          <ListItemText primary="Статистика" />
+        <ListItemButton onClick={() => navigate('/stats')}>
+          <Tooltip title='Статистика' placement={placement}>
+            <ListItemIcon>
+              <BarChartIcon />
+            </ListItemIcon>
+          </Tooltip>
+          <ListItemText primary='Статистика' />
         </ListItemButton>
-        <ListItemButton>
-          <ListItemIcon>
-            <HandymanIcon />
-          </ListItemIcon>
-          <ListItemText primary="Инструменты" />
+        <ListItemButton onClick={() => navigate('/tools')}>
+          <Tooltip title='Инструменты' placement={placement}>
+            <ListItemIcon>
+              <HandymanIcon />
+            </ListItemIcon>
+          </Tooltip>
+          <ListItemText primary='Инструменты' />
         </ListItemButton>
         <Divider sx={{ my: 1 }} />
         {secondaryListItems}

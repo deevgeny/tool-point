@@ -10,6 +10,11 @@ import HomeView from './views/HomeView';
 import AccountView from './views/AccountView';
 import LoginView from './views/LoginView';
 import RegisterView from './views/RegisterView';
+import ClientsView from './views/ClientsView';
+import ProductsView from './views/ProductsView';
+import StockView from './views/StockView';
+import StatsView from './views/StatsView';
+import ToolsView from './views/ToolsView';
 import UnauthorizedView from './views/UnauthorizedView';
 import UserAccountView from './views/UserAccountView';
 import NotFoundView from './views/NotFoundView';
@@ -36,6 +41,11 @@ function App() {
             <Route path='/' element={<HomeView />} />
             <Route path='/account' element={<AccountView />} />
             <Route path='/account/user' element={<UserAccountView />} />
+            <Route path='/clients' element={<ClientsView />} />
+            <Route path='/products' element={<ProductsView />} />
+            <Route path='/stock' element={<StockView />} />
+            <Route path='/stats' element={<StatsView />} />
+            <Route path='/tools' element={<ToolsView />} />
           </Route>
         </Route>
 

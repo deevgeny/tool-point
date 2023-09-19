@@ -61,6 +61,7 @@ function TopBar({ open, toggleDrawer }) {
   }, []);
 
   useEffect(() => {
+    // Change page title in TopBar
     setPageTitle(get_page_title(pathname));
   }, [pathname])
 
@@ -72,18 +73,20 @@ function TopBar({ open, toggleDrawer }) {
           pr: '24px', // keep right padding when drawer closed
         }}
       >
-        <IconButton
-          edge='start'
-          color='inherit'
-          aria-label='open drawer'
-          onClick={toggleDrawer}
-          sx={{
-            marginRight: '36px',
-            ...(open && { display: 'none' }),
-          }}
-        >
-          <MenuIcon />
-        </IconButton>
+        <Tooltip title='Развернуть' placement='right'>
+          <IconButton
+            edge='start'
+            color='inherit'
+            aria-label='open drawer'
+            onClick={toggleDrawer}
+            sx={{
+              marginRight: '36px',
+              ...(open && { display: 'none' }),
+            }}
+          >
+            <MenuIcon />
+          </IconButton>
+        </Tooltip>
         <Typography
           component='h1'
           variant='h6'

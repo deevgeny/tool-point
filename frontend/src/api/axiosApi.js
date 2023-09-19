@@ -40,8 +40,8 @@ axiosApi.interceptors.response.use(
   response => response,
   
   async (error) => {
-    // Refresh access token if access token exists in local storage and refresh token is valid
-    if (Token.getLocalAccessToken() && Token.isLocalRefreshTokenValid()) {
+    // Refresh access token if refresh token is valid
+    if (Token.isLocalRefreshTokenValid()) {
       const prevRequest = error?.config;
       if (error?.response?.status === 401 && !prevRequest?.sent) {
         prevRequest.sent = true;
@@ -49,10 +49,11 @@ axiosApi.interceptors.response.use(
         const response = await axiosRefresh.post("/auth/token/refresh", data);
         prevRequest.headers["Authorization"] = `Bearer ${response?.data.access}`;
         Token.updateLocalAccessToken(response?.data.access);
+        console.log('boom 2')
         return axiosApi(prevRequest);
       }
     } else {
-      // Remove tokens from storage when both are expired
+      // Remove tokens from storage when refresh token is expired
       Token.clear();
     }
     return Promise.reject(error);
