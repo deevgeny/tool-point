@@ -14,9 +14,9 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
-import useAuth from '../hooks/useAuth';
-import Token from '../services/token';
-import useAxiosApiFunction, { API } from '../hooks/useAxiosApiFunction';
+import useAuth from '../../hooks/useAuth';
+import Token from '../../services/token';
+import useAxiosApiFunction, { API } from '../../hooks/useAxiosApiFunction';
 
 
 const validationSchema = yup.object({
@@ -30,7 +30,7 @@ const validationSchema = yup.object({
     .required('Обязательное поле'),
 });
 
-function LoginView() {
+function Login() {
   const { response, loading, axiosFetch } = useAxiosApiFunction();
   const { setAuth } = useAuth();
   const [message, setMessage] = useState({});
@@ -152,4 +152,4 @@ function LoginView() {
   );
 }
 
-export default LoginView;
+export default Login;

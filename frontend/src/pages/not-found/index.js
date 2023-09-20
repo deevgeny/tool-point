@@ -1,9 +1,9 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
-import ContentWrapper from '../UI/wrappers/ContentWrapper';
-import ErrorWrapper from '../UI/wrappers/ErrorWrapper';
+import ContentWrapper from '../../components/wrappers/ContentWrapper';
+import ErrorWrapper from '../../components/wrappers/ErrorWrapper';
 
-function NotFoundView() {
+function NotFound() {
   // NotFound route
   return (
     <ContentWrapper>
@@ -16,4 +16,4 @@ function NotFoundView() {
   );
 }
 
-export default NotFoundView;
+export default NotFound;

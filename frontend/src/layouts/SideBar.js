@@ -17,7 +17,6 @@ import WarehouseIcon from '@mui/icons-material/Warehouse';
 import LayersIcon from '@mui/icons-material/Layers';
 import Tooltip from '@mui/material/Tooltip';
 import { useNavigate } from 'react-router-dom';
-import { secondaryListItems } from './listItems';
 import { drawerWidth } from '../utils/constants'; 
 
 
@@ -122,7 +121,7 @@ function SideBar({ open, toggleDrawer }) {
           <ListItemText primary='Инструменты' />
         </ListItemButton>
         <Divider sx={{ my: 1 }} />
-        {secondaryListItems}
+        {/* Add secondary list items */}
       </List>
     </Drawer>
   );

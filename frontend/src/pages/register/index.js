@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import useAxiosApiFunction, { API } from '../hooks/useAxiosApiFunction';
+import useAxiosApiFunction, { API } from '../../hooks/useAxiosApiFunction';
 
 
 const validationSchema = yup.object({
@@ -39,7 +39,7 @@ const validationSchema = yup.object({
 });
 
 
-function RegisterView() {
+function Register() {
   const { response, loading, axiosFetch } = useAxiosApiFunction();
   const [message, setMessage] = useState({});
   const navigate = useNavigate();
@@ -204,4 +204,4 @@ function RegisterView() {
   );
 }
 
-export default RegisterView;
+export default Register;

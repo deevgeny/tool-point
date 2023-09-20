@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 import Button from '@mui/material/Button';
 import { Link as RouterLink } from 'react-router-dom';
-import useAxiosApiFunction, { API } from '../hooks/useAxiosApiFunction';
+import useAxiosApiFunction, { API } from '../../hooks/useAxiosApiFunction';
 
 
 function UserCard() {

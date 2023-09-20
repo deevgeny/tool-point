@@ -1,9 +1,9 @@
 import React from 'react';
 import Container from '@mui/material/Container';
-import UserPasswordChangeForm from '../components/UserPasswordChangeForm';
-import UserEditForm from '../components/UserEditForm';
+import UserPasswordChangeForm from './UserPasswordChangeForm';
+import UserEditForm from './UserEditForm';
 
-function UserAccountView() {
+function UserAccount() {
   return (
     <Container component='main' maxWidth='xs'>
       <UserEditForm />
@@ -12,4 +12,4 @@ function UserAccountView() {
   );
 }
 
-export default UserAccountView;
+export default UserAccount;

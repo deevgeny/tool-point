@@ -1,10 +1,10 @@
 import React from 'react';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import UserCard from '../components/UserCard';
-import UserJobCard from '../components/UserJobCard';
+import UserCard from './UserCard';
+import UserJobCard from './UserJobCard';
 
-function AccountView() {
+function Account() {
   return (
     <Container maxWidth='lg' sx={{ mt: 4, mb: 4 }}>
       <Grid
@@ -24,4 +24,4 @@ function AccountView() {
   );
 }
 
-export default AccountView;
+export default Account;

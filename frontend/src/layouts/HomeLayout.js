@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import Toolbar from '@mui/material/Toolbar';
-import SideBar from '../components/SideBar';
-import TopBar from '../components/TopBar';
-import ContentWrapper from '../UI/wrappers/ContentWrapper';
+import SideBar from './SideBar';
+import TopBar from './TopBar';
+import ContentWrapper from '../components/wrappers/ContentWrapper';
 import { Outlet } from 'react-router-dom';
-import ErrorDialog from '../components/ErrorDialog';
+import ErrorDialog from './ErrorDialog';
 
 
 function HomeLayout() {

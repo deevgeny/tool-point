@@ -4,7 +4,7 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 
 
-function ToolsView() {
+function Tools() {
   return (
     <Container maxWidth='lg' sx={{ mt: 4, mb: 4 }}>
       <Grid
@@ -22,4 +22,4 @@ function ToolsView() {
   );
 }
 
-export default ToolsView;
+export default Tools;

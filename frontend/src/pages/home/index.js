@@ -4,7 +4,12 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 
 
-function StockView() {
+function Home() {
+  function handleFileUpload(event) {
+    const file = event.target.files[0]
+    console.log(event)
+    console.log(file)
+  }
   return (
     <Container maxWidth='lg' sx={{ mt: 4, mb: 4 }}>
       <Grid
@@ -14,7 +19,7 @@ function StockView() {
         //justifyContent='space-around'
       >
         <Grid item xs={12} sm={12} md={12} lg={12}>
-          <Typography variant='h3'>Склад</Typography>
+          <Typography variant='h3'>Главная</Typography>
           <Typography variant='body'>Данная страница находится в разработке.</Typography>
         </Grid>
       </Grid>
@@ -22,4 +27,4 @@ function StockView() {
   );
 }
 
-export default StockView;
+export default Home;

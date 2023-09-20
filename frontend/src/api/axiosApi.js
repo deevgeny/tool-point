@@ -1,5 +1,5 @@
-import axios from "axios";
-import Token from "../services/token";
+import axios from 'axios';
+import Token from '../services/token';
 
 const {
   REACT_APP_API_URL: API_URL,
@@ -12,7 +12,7 @@ const axiosApi = axios.create({
   baseURL: baseUrl,
   withCredentials: false,
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 
@@ -20,7 +20,7 @@ const axiosRefresh = axios.create({
   baseURL: baseUrl,
   withCredentials: false,
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 
@@ -46,10 +46,9 @@ axiosApi.interceptors.response.use(
       if (error?.response?.status === 401 && !prevRequest?.sent) {
         prevRequest.sent = true;
         const data = JSON.stringify({ refresh: Token.getLocalRefreshToken() });
-        const response = await axiosRefresh.post("/auth/token/refresh", data);
-        prevRequest.headers["Authorization"] = `Bearer ${response?.data.access}`;
+        const response = await axiosRefresh.post('/auth/token/refresh', data);
+        prevRequest.headers['Authorization'] = `Bearer ${response?.data.access}`;
         Token.updateLocalAccessToken(response?.data.access);
-        console.log('boom 2')
         return axiosApi(prevRequest);
       }
     } else {

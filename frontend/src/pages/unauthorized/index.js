@@ -1,9 +1,9 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
-import ContentWrapper from '../UI/wrappers/ContentWrapper';
-import ErrorWrapper from '../UI/wrappers/ErrorWrapper';
+import ContentWrapper from '../../components/wrappers/ContentWrapper';
+import ErrorWrapper from '../../components/wrappers/ErrorWrapper';
 
-function UnauthorizedView() {
+function Unauthorized() {
   return (
     <ContentWrapper>
       <ErrorWrapper>
@@ -15,4 +15,4 @@ function UnauthorizedView() {
   );
 }
 
-export default UnauthorizedView;
+export default Unauthorized;

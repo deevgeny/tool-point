@@ -4,7 +4,7 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 
 
-function StatsView() {
+function Stock() {
   return (
     <Container maxWidth='lg' sx={{ mt: 4, mb: 4 }}>
       <Grid
@@ -14,7 +14,7 @@ function StatsView() {
         //justifyContent='space-around'
       >
         <Grid item xs={12} sm={12} md={12} lg={12}>
-          <Typography variant='h3'>Статистика</Typography>
+          <Typography variant='h3'>Склад</Typography>
           <Typography variant='body'>Данная страница находится в разработке.</Typography>
         </Grid>
       </Grid>
@@ -22,4 +22,4 @@ function StatsView() {
   );
 }
 
-export default StatsView;
+export default Stock;
