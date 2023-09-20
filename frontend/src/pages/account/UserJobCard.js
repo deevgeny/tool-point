@@ -4,7 +4,7 @@ import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
+import NavButton from '../../components/NavButton';
 
 
 function UserJobCard() {
@@ -23,7 +23,7 @@ function UserJobCard() {
         <Typography variant='body1'>Должность</Typography>
       </CardContent>
       <CardActions>
-        <Button size='small'>Войти</Button>
+        <NavButton to='#'>Войти</NavButton>
       </CardActions>
     </Card>
   );

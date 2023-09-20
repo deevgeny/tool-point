@@ -9,6 +9,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Button from '@mui/material/Button';
 import { Link as RouterLink } from 'react-router-dom';
 import useAxiosApiFunction, { API } from '../../hooks/useAxiosApiFunction';
+import NavButton from '../../components/NavButton';
 
 
 function UserCard() {
@@ -67,13 +68,9 @@ function UserCard() {
         }
       </CardContent>
       <CardActions>
-        <Button
-          size='small'
-          to='/account/user'
-          component={RouterLink}
-        >
+        <NavButton to='/account/user'>
           Редактировать
-        </Button>
+        </NavButton>
       </CardActions>
     </Card>
   );

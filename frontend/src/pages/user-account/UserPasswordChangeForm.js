@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import CircularProgress from '@mui/material/CircularProgress';
 import useAxiosApiFunction, { API } from '../../hooks/useAxiosApiFunction';
 
 
@@ -59,9 +60,12 @@ function UserPasswordChangeForm() {
         justifyContent: 'center'
       }}
     >
-      <Typography component='h3' variant='h5'>
-        Сменить пароль
-      </Typography>
+      {formik.isSubmitting
+        ? <CircularProgress sx={{display: 'block', marginX: 'auto'}} />
+        : <Typography component='h3' variant='h5'>
+            Сменить пароль
+          </Typography>
+      }
       <Box component='form' onSubmit={formik.handleSubmit} noValidate sx={{ mt: 1 }}>
         <TextField
           margin='normal'

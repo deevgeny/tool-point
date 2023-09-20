@@ -8,6 +8,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import InputAdornment from '@mui/material/InputAdornment';
+import CircularProgress from '@mui/material/CircularProgress';
 import useAxiosApiFunction, { API } from '../../hooks/useAxiosApiFunction';
 
 
@@ -118,9 +119,12 @@ function UserEditForm() {
         justifyContent: 'center'
       }}
     >
-      <Typography component='h3' variant='h5'>
-        Редактировать
-      </Typography>
+      {formik.isSubmitting
+        ? <CircularProgress sx={{display: 'block', marginX: 'auto'}} />
+        : <Typography component='h3' variant='h5'>
+            Редактировать
+          </Typography>
+      }
       <Box
         component='form'
         noValidate
