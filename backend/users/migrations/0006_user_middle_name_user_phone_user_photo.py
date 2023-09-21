@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='user',
             name='phone',
-            field=models.CharField(blank=True, max_length=10, validators=[users.models.phone_is_digit], verbose_name='Телефон'),
+            field=models.CharField(blank=True, max_length=10, validators=[users.models.phone_validator], verbose_name='Телефон'),
         ),
         migrations.AddField(
             model_name='user',

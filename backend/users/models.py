@@ -1,3 +1,5 @@
+import re
+
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
@@ -5,11 +7,14 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
-def phone_is_digit(value):
-    """Phone number is digit validator."""
-    if not value.isdigit():
+def phone_validator(value):
+    """Phone number validator."""
+    # Regexp pattern: +7 (000) 000-00-00
+    pattern = ('^\\+\\d{1}[^\\S\\r\\n\\t]\\(\\d{3}\\)[^\\S\\r\\n\\t]\\d{3}'
+               '\\-\\d{2}-\\d{2}$')
+    if not re.match(pattern, value):
         raise ValidationError(
-            ('Номер телефона может состоять только из цифр.'),
+            ('Неверный формат номера телефона.'),
             params={'value': value},
         )
 
@@ -81,7 +86,7 @@ class User(AbstractUser):
         verbose_name='телефон',
         max_length=18,
         blank=True,
-        validators=[]
+        validators=[phone_validator]
     )
     photo = models.ImageField(
         verbose_name='фото пользователя',

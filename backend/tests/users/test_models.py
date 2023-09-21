@@ -3,10 +3,10 @@ from itertools import zip_longest
 import pytest
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from django.core.validators import MaxLengthValidator, MinLengthValidator
+from django.core.validators import MaxLengthValidator
 from django.db import models
 
-from users.models import phone_is_digit, profile_photo
+from users.models import phone_validator, profile_photo
 
 pytestmark = pytest.mark.unit
 
@@ -103,17 +103,15 @@ def test_phone_field(field_attr, value):
 
 def test_phone_fields_validators():
     field = 'phone'
-    count = 1
-    # validators = ['phone_is_digit']
+    count = 2
+    validators = ['phone_validator']
     assert len(User._meta.get_field(field).validators) == count, (
         f'User.{field} should have {count} validators'
     )
-    # assert User._meta.get_field(field).validators[0].__name__ in validators, (
-    #     '`phone_is_digit` validator is missing'
-    # )
-    # assert isinstance(User._meta.get_field(field).validators[1],
-    #                MinLengthValidator), 'MinLengthValidator is missing'
-    assert isinstance(User._meta.get_field(field).validators[0],
+    assert User._meta.get_field(field).validators[0].__name__ in validators, (
+         '`phone_is_digit` validator is missing'
+    )
+    assert isinstance(User._meta.get_field(field).validators[1],
                    MaxLengthValidator), 'MaxLengthValidator is missing'
 
 
@@ -145,21 +143,6 @@ def test_profile_photo_func():
     assert result == 'profile-photo/1-USER.png', (
         'Incorrect path and filename from profile_photo() function'
     )
-
-
-def test_phone_is_digit_func():
-    correct_phone = '9605554422'
-    incorrect_phone = 'x9605554422'
-    try:
-        phone_is_digit(correct_phone)
-    except ValidationError:
-        assert False, 'Custom validator function should not raise error'
-
-    try:
-        phone_is_digit(incorrect_phone)
-        assert False, 'Custom validator function should raise error'
-    except ValidationError:
-        pass
 
 
 def test_user_model_login_field():

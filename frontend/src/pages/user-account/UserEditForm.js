@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { styled } from '@mui/material/styles';
-import { IMaskInput } from 'react-imask';
 import Alert from '@mui/material/Alert';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
@@ -12,24 +11,6 @@ import InputAdornment from '@mui/material/InputAdornment';
 import CircularProgress from '@mui/material/CircularProgress';
 import PhoneMask from './PhoneMask';
 import useAxiosApiFunction, { API } from '../../hooks/useAxiosApiFunction';
-
-
-
-/* const PhoneMask = React.forwardRef(function PhoneMask(props, ref) {
-  const { onChange, ...other } = props;
-  return (
-    <IMaskInput
-      {...other}
-      mask='+7 (#00) 000-00-00'
-      definitions={{
-        '#': /[1-9]/,
-      }}
-      inputRef={ref}
-      onAccept={(value) => onChange({ target: { name: props.name, value } })}
-      overwrite
-    />
-  );
-}); */
 
 
 const VisuallyHiddenInput = styled('input')`
@@ -59,6 +40,8 @@ const validationSchema = yup.object({
     .required('Обязательное поле'),
   phone: yup
     .string('Укажите номер телефона')
+    .matches(/^\+\d{1}[^\S\r\n\t]\(\d{3}\)[^\S\r\n\t]\d{3}\-\d{2}-\d{2}$/, 'Неверный формат номера')
+    // regexp match +7 (000) 000-00-00
 });
 
 

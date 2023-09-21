@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='user',
             name='phone',
-            field=models.CharField(blank=True, max_length=10, validators=[users.models.phone_is_digit, django.core.validators.MinLengthValidator(limit_value=10, message='В номере телефона должно быть не менее 10-ти цифр')], verbose_name='Телефон'),
+            field=models.CharField(blank=True, max_length=10, validators=[users.models.phone_validator, django.core.validators.MinLengthValidator(limit_value=10, message='В номере телефона должно быть не менее 10-ти цифр')], verbose_name='Телефон'),
         ),
     ]
