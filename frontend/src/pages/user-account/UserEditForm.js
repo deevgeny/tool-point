@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { styled } from '@mui/material/styles';
+import { IMaskInput } from 'react-imask';
 import Alert from '@mui/material/Alert';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
@@ -9,7 +10,26 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import InputAdornment from '@mui/material/InputAdornment';
 import CircularProgress from '@mui/material/CircularProgress';
+import PhoneMask from './PhoneMask';
 import useAxiosApiFunction, { API } from '../../hooks/useAxiosApiFunction';
+
+
+
+/* const PhoneMask = React.forwardRef(function PhoneMask(props, ref) {
+  const { onChange, ...other } = props;
+  return (
+    <IMaskInput
+      {...other}
+      mask='+7 (#00) 000-00-00'
+      definitions={{
+        '#': /[1-9]/,
+      }}
+      inputRef={ref}
+      onAccept={(value) => onChange({ target: { name: props.name, value } })}
+      overwrite
+    />
+  );
+}); */
 
 
 const VisuallyHiddenInput = styled('input')`
@@ -65,7 +85,7 @@ function UserEditForm() {
       email: values.email,
       phone: values.phone
     };
-    axiosFetch(API.editUserInfo, { data });
+    axiosFetch(API.editUserInfo, { data, skip: [400] });
   }
 
   function tickMarkAdornment() {
@@ -88,7 +108,7 @@ function UserEditForm() {
   
   useEffect(() => {
     if (!formik.isSubmitting && response?.status === 200) {
-      // Update form with current user data
+      // On component load: fill form with current user data
       formik.initialValues.firstName = response?.data?.first_name || ''
       formik.initialValues.middleName = response?.data?.middle_name || ''
       formik.initialValues.lastName = response?.data?.last_name || ''
@@ -96,9 +116,15 @@ function UserEditForm() {
       formik.initialValues.phone = response?.data?.phone || ''
       setMessage({}); // Set message to trigger re-render
     } else if (formik.isSubmitting && response?.status === 200) {
-      // When form was submitted and response is OK send message to user
+      // On successful form submit: update message 
       formik.setSubmitting(false);
       setMessage({ status: 'success', text: 'Данные успешно обновлены' })
+    } else if (formik.isSubmitting && response) {
+      // On failed form submit: update message
+      formik.setSubmitting(false);
+      // MOCK ERROR: change when form handler will be implemented
+      // console.log(response.data)
+      setMessage({ status: 'error', text: 'Ошибка данных' })
     }
     // eslint-disable-next-line
   }, [response]);
@@ -145,7 +171,9 @@ function UserEditForm() {
             onBlur={formik.handleBlur}
             error={formik.touched.firstName && Boolean(formik.errors.firstName)}
             helperText={formik.touched.firstName && formik.errors.firstName}
-            InputProps={formik.initialValues.firstName !== formik.values.firstName && tickMarkAdornment()}
+            InputProps={{
+              ...(formik.initialValues.firstName !== formik.values.firstName && tickMarkAdornment()),
+            }}
           />
           <TextField
             margin='normal'
@@ -159,7 +187,9 @@ function UserEditForm() {
             onBlur={formik.handleBlur}
             error={formik.touched.middleName && Boolean(formik.errors.middleName)}
             helperText={formik.touched.middleName && formik.errors.middleName}
-            InputProps={formik.initialValues.middleName !== formik.values.middleName && tickMarkAdornment()}
+            InputProps={{
+              ...(formik.initialValues.middleName !== formik.values.middleName && tickMarkAdornment()),
+            }}
           />
           <TextField
             margin='normal'
@@ -173,7 +203,9 @@ function UserEditForm() {
             onBlur={formik.handleBlur}
             error={formik.touched.lastName && Boolean(formik.errors.lastName)}
             helperText={formik.touched.lastName && formik.errors.lastName}
-            InputProps={formik.initialValues.lastName !== formik.values.lastName && tickMarkAdornment()}
+            InputProps={{
+              ...(formik.initialValues.lastName !== formik.values.lastName && tickMarkAdornment()),
+            }}
           />
           <TextField
             margin='normal'
@@ -187,7 +219,9 @@ function UserEditForm() {
             onBlur={formik.handleBlur}
             error={formik.touched.email && Boolean(formik.errors.email)}
             helperText={formik.touched.email && formik.errors.email}
-            InputProps={formik.initialValues.email !== formik.values.email && tickMarkAdornment()}
+            InputProps={{
+              ...(formik.initialValues.email !== formik.values.email && tickMarkAdornment()),
+            }}
           />
           <TextField
             margin='normal'
@@ -201,7 +235,10 @@ function UserEditForm() {
             onBlur={formik.handleBlur}
             error={formik.touched.phone && Boolean(formik.errors.phone)}
             helperText={formik.touched.phone && formik.errors.phone}
-            InputProps={formik.initialValues.phone !== formik.values.phone && tickMarkAdornment()}
+            InputProps={{
+              ...(formik.initialValues.phone !== formik.values.phone && tickMarkAdornment()),
+              inputComponent: PhoneMask,
+            }}
           />
           {message?.status && <Alert severity={message.status}>{message.text}</Alert>}
           <Button

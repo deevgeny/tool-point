@@ -92,7 +92,7 @@ def test_role_field(field_attr, value):
 
 @pytest.mark.parametrize('field_attr, value',
                          [['verbose_name', 'телефон'],
-                          ['max_length', 10],
+                          ['max_length', 18],
                           ['blank', True],])
 def test_phone_field(field_attr, value):
     field = 'phone'
@@ -103,17 +103,17 @@ def test_phone_field(field_attr, value):
 
 def test_phone_fields_validators():
     field = 'phone'
-    count = 3
-    validators = ['phone_is_digit']
+    count = 1
+    # validators = ['phone_is_digit']
     assert len(User._meta.get_field(field).validators) == count, (
         f'User.{field} should have {count} validators'
     )
-    assert User._meta.get_field(field).validators[0].__name__ in validators, (
-        '`phone_is_digit` validator is missing'
-    )
-    assert isinstance(User._meta.get_field(field).validators[1],
-                   MinLengthValidator), 'MinLengthValidator is missing'
-    assert isinstance(User._meta.get_field(field).validators[2],
+    # assert User._meta.get_field(field).validators[0].__name__ in validators, (
+    #     '`phone_is_digit` validator is missing'
+    # )
+    # assert isinstance(User._meta.get_field(field).validators[1],
+    #                MinLengthValidator), 'MinLengthValidator is missing'
+    assert isinstance(User._meta.get_field(field).validators[0],
                    MaxLengthValidator), 'MaxLengthValidator is missing'
 
 
