@@ -1,11 +1,11 @@
 import FetchService from './fetch';
-import Token from './token';
+import TokenService from './token';
 
 
 class Api {
 
-  constructor(Service) {
-    this.fetch = Service
+  constructor(FetchService) {
+    this.fetch = FetchService;
   }
 
   login(conf) {
@@ -13,7 +13,7 @@ class Api {
   }
   
   logout(conf) {
-    Token.clear();
+    TokenService.clear();
   }
 
   register(conf) {
@@ -21,7 +21,7 @@ class Api {
   }
 
   getUserInfo(conf) {
-    return this.fetch.post('/users/me', conf);
+    return this.fetch.get('/users/me', conf);
   }
 
   editUserInfo(conf) {

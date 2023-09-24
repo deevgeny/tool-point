@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -6,13 +7,12 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
-import Token from '../services/token';
-import useAuthContext from '../hooks/useAuth';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import NoAccountsIcon from '@mui/icons-material/NoAccounts';
-import { useLocation, useNavigate } from 'react-router-dom';
-import useAxiosApiFunction, { API } from '../hooks/useAxiosApiFunction';
+import useAuthContext from '../hooks/useAuth';
+import ApiService from '../services/api';
+import TokenService from '../services/token';
 import { get_page_title } from '../utils/title';
 import { drawerWidth } from '../utils/constants';
 
@@ -37,15 +37,15 @@ const AppBar = styled(MuiAppBar, {
 
 
 function TopBar({ open, toggleDrawer }) {
-  const { response, axiosFetch } = useAxiosApiFunction();
-  const { setAuth } = useAuthContext();
+  const [data, setData] = useState({});
   const [pageTitle, setPageTitle] = useState('');
+  const { setAuth } = useAuthContext();
   const navigate = useNavigate();
   const location = useLocation();
   const pathname = location.pathname;
   
   function handleLogout() {
-    Token.clear();
+    TokenService.clear();
     setAuth({});
   }
 
@@ -55,8 +55,20 @@ function TopBar({ open, toggleDrawer }) {
   }
 
   useEffect(() => {
-    axiosFetch(API.currentUserInfo);
+    const controller = new AbortController();
+    async function getData() {
+      const response = await ApiService.getUserInfo({
+        signal: controller.signal
+      });
+      const data = await response.json?.();
+      setData(data || {});
+    }
+
+    getData();
     
+    return () => {
+      controller.abort();
+    };
     // eslint-disable-next-line
   }, []);
 
@@ -100,8 +112,8 @@ function TopBar({ open, toggleDrawer }) {
           <IconButton color='inherit' size='small' onClick={handleAccount}>
             <Avatar>
               {
-                response?.data?.first_name
-                  ? `${response?.data?.first_name[0]}${response?.data?.last_name[0]}`
+                data?.first_name
+                  ? `${data?.first_name[0]}${data?.last_name[0]}`
                   : <NoAccountsIcon />
               }
             </Avatar>

@@ -97,6 +97,7 @@ function UserEditForm() {
       formik.initialValues.lastName = response?.data?.last_name || ''
       formik.initialValues.email = response?.data?.email || ''
       formik.initialValues.phone = response?.data?.phone || ''
+      // Fix double requests effect due to rerendering
       setMessage({}); // Set message to trigger re-render
     } else if (formik.isSubmitting && response?.status === 200) {
       // On successful form submit: update message 

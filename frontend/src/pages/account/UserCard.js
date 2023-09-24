@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
@@ -6,18 +6,31 @@ import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
-import Button from '@mui/material/Button';
-import { Link as RouterLink } from 'react-router-dom';
-import useAxiosApiFunction, { API } from '../../hooks/useAxiosApiFunction';
 import NavButton from '../../components/NavButton';
+import ApiService from '../../services/api';
 
 
 function UserCard() {
-  const { response, loading, axiosFetch } = useAxiosApiFunction();
+  const [data, setData] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    axiosFetch(API.currentUserInfo);
+    const controller = new AbortController();
+    async function getData() {
+      const response = await ApiService.getUserInfo({
+        signal: controller.signal
+      });
+      const data = await response.json?.();
+      setData(data || {});
+    }
 
+    setLoading(true);
+    getData();
+    setLoading(false);
+
+    return () => {
+      controller.abort();
+    }
     // eslint-disable-next-line
   }, []);
 
@@ -26,8 +39,8 @@ function UserCard() {
       <CardHeader title='Личные данные' />
       <CardMedia
         component='img'
-        image={response?.data?.photo
-          ? response?.data?.photo
+        image={data?.photo
+          ? data?.photo
           : '/images/blank-avatar.png'}
         alt='My avatar'
         sx={{
@@ -50,19 +63,19 @@ function UserCard() {
           ? <CircularProgress />
           : <>
               <Typography variant='body1'>
-                {response?.data?.first_name}
+                {data?.first_name}
               </Typography>
               <Typography variant='body1'>
-                {response?.data?.middle_name}
+                {data?.middle_name}
               </Typography>
               <Typography variant='body1'>
-                {response?.data?.last_name}
+                {data?.last_name}
               </Typography>
               <Typography variant='body2' color='text.secondary'>
-                {response?.data?.email}
+                {data?.email}
               </Typography>
               <Typography variant='body2' color='text.secondary'>
-                {response?.data?.phone}
+                {data?.phone}
               </Typography>
              </>
         }

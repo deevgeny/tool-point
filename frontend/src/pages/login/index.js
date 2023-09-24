@@ -17,7 +17,7 @@ import Alert from '@mui/material/Alert';
 import ErrorDialog from '../../components/ErrorDialog';
 import useAuth from '../../hooks/useAuth';
 import useError from '../../hooks/useError';
-import Token from '../../services/token';
+import TokenService from '../../services/token';
 import ApiService from '../../services/api';
 
 
@@ -33,12 +33,12 @@ const validationSchema = yup.object({
 });
 
 function Login() {
+  const controller = new AbortController();
   const [response, setResponse] = useState({});
   const [message, setMessage] = useState({});
   const { setError } = useError();
   const { setAuth } = useAuth();
   const navigate = useNavigate();
-  const controller = new AbortController();
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -59,15 +59,15 @@ function Login() {
   useEffect(() => {
     async function getData() {
       if (response?.status === 200) {
-        const data = await response.json();
+        const data = await response.json?.();
         const decodedToken = jose.decodeJwt(data.access);
         setAuth({
           access: data.access,
           refresh: data.refresh,
           role: decodedToken.role
         });
-        Token.updateLocalAccessToken(data.access);
-        Token.updateLocalRefreshToken(data.refresh);
+        TokenService.updateAccessToken(data.access);
+        TokenService.updateRefreshToken(data.refresh);
         navigate('/', { replace: true });
       } else if (response?.status === 401) {
         setMessage({
@@ -88,7 +88,9 @@ function Login() {
 
     formik.setSubmitting(false);
 
-    return () => { controller.abort(); }
+    return () => {
+      controller.abort();
+    }
     
     // eslint-disable-next-line
   }, [response]);

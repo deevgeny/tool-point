@@ -1,5 +1,5 @@
 import axios from 'axios';
-import Token from '../services/token';
+import TokenService from '../services/token';
 
 const {
   REACT_APP_API_URL: API_URL,
@@ -26,7 +26,7 @@ const axiosRefresh = axios.create({
 
 axiosApi.interceptors.request.use(
   (config) => {
-    const token = Token.getLocalAccessToken();
+    const token = TokenService.getAccessToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -41,19 +41,19 @@ axiosApi.interceptors.response.use(
   
   async (error) => {
     // Refresh access token if refresh token is valid
-    if (Token.isLocalRefreshTokenValid()) {
+    if (TokenService.isRefreshTokenValid()) {
       const prevRequest = error?.config;
       if (error?.response?.status === 401 && !prevRequest?.sent) {
         prevRequest.sent = true;
-        const data = JSON.stringify({ refresh: Token.getLocalRefreshToken() });
+        const data = JSON.stringify({ refresh: TokenService.getRefreshToken() });
         const response = await axiosRefresh.post('/auth/token/refresh', data);
         prevRequest.headers['Authorization'] = `Bearer ${response?.data.access}`;
-        Token.updateLocalAccessToken(response?.data.access);
+        TokenService.updateAccessToken(response?.data.access);
         return axiosApi(prevRequest);
       }
     } else {
       // Remove tokens from storage when refresh token is expired
-      Token.clear();
+      TokenService.clear();
     }
     return Promise.reject(error);
   });

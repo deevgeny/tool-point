@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import CircularProgress from '@mui/material/CircularProgress';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -12,9 +12,10 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { Alert } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import useAxiosApiFunction, { API } from '../../hooks/useAxiosApiFunction';
+import Alert from '@mui/material/Alert';
+import ErrorDialog from '../../components/ErrorDialog';
+import useError from '../../hooks/useError';
+import ApiService from '../../services/api';
 
 
 const validationSchema = yup.object({
@@ -40,8 +41,10 @@ const validationSchema = yup.object({
 
 
 function Register() {
-  const { response, loading, axiosFetch } = useAxiosApiFunction();
+  const controller = new AbortController();
+  const [response, setResponse] = useState({});
   const [message, setMessage] = useState({});
+  const { setError } = useError();
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
@@ -56,28 +59,42 @@ function Register() {
   });
 
   async function handleFormSubmit(values) {
-    const data = {
+    const body = {
       first_name: values.firstName,
       last_name: values.lastName,
       email: values.email,
       password: values.password
     }
-    axiosFetch(API.register, { data, skip: [400] });
+    const response = await ApiService.register({
+      body,
+      signal: controller.signal
+    });
+    setResponse(response);
   }
 
   useEffect(() => {
-    if (response?.status === 201) {
-      setMessage({
-        status: 'success',
-        text: ['Поздравляем с успешной регистрацией! Через несколько секунд вы будете перенаправлены на страницу авторизации.']
-      });
-      setTimeout(() => {
-        navigate('/', { replace: true });
-      }, 5000);
-    } else if (response?.status === 400) {
-      console.log(Object.values(response?.data))
-      setMessage({ status: 'error', text: Object.values(response?.data)[0] });
+    async function getData() {
+      if (response?.status === 201) {
+        setMessage({
+          status: 'success',
+          text: ['Поздравляем с успешной регистрацией! Через несколько секунд вы будете перенаправлены на страницу авторизации.']
+        });
+        setTimeout(() => {
+          navigate('/', { replace: true });
+        }, 5000);
+      } else if (response?.status === 400) {
+        const data = await response.json?.();
+        setMessage({ status: 'error', text: Object.values(data)[0] });
+      } else {
+        setError(response);
+      }
     }
+
+    getData();
+
+    return () => {
+      controller.abort();
+    };
     // eslint-disable-next-line
   }, [response]);
 
@@ -92,7 +109,7 @@ function Register() {
         }}
       >
         {
-          loading
+          formik.isSubmitting
           ? <CircularProgress />
           : <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
               <LockOutlinedIcon />
@@ -200,6 +217,7 @@ function Register() {
           </Grid>
         </Box>
       </Box>
+      <ErrorDialog />
     </Container>
   );
 }

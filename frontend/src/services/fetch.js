@@ -1,4 +1,4 @@
-import Token from './token';
+import TokenService from './token';
 
 
 const {
@@ -21,7 +21,7 @@ class Fetch {
 
   #updateHeadersAuthorization() {
     // Update access token in headers.Authorization from local storage
-    const token = Token.getLocalAccessToken();
+    const token = TokenService.getAccessToken();
     if (token) {
       this.#headers.Authorization = `Bearer ${token}`;
     } else {
@@ -53,18 +53,18 @@ class Fetch {
 
   async #refreshAccessToken() {
     // Send request and refresh access token
-    if (Token.isLocalRefreshTokenValid()) {
+    if (TokenService.isRefreshTokenValid()) {
       const headers = { ...this.#headers };
       delete headers.Authorization;
       const request = new Request(`${this.#baseUrl}/auth/token/refresh`, {
         method: 'POST',
-        body: JSON.stringify({ refresh: Token.getLocalRefreshToken() })
+        body: JSON.stringify({ refresh: TokenService.getRefreshToken() })
       });
       try {
         const response = await fetch(request);
         if (response.ok) {
           const data = await response.json();
-          Token.updateLocalAccessToken(data.access);
+          TokenService.updateAccessToken(data.access);
         } else {
           // Handle non 200's responses
         }
@@ -72,7 +72,7 @@ class Fetch {
         // Handle fetch error
       }
     } else {
-      Token.clear();
+      TokenService.clear();
     }
   }
   
@@ -87,6 +87,8 @@ class Fetch {
           headers: { ...this.#headers }
         });
         return this.#handleRequest(newRequest, true);
+      } else if (response?.status === 401 && refreshed) {
+        TokenService.clear();
       }
       return response;
     } catch (error) {
