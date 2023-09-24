@@ -17,24 +17,22 @@ export default function ErrorDialog() {
   };
 
   return (
-    <>
-      <Dialog
-        open={error?.status ? true : false}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          Ошибка {error?.status}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {error?.message}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Назад</Button>
-        </DialogActions>
-      </Dialog>
-    </>
+    <Dialog
+      open={error?.status ? true : false}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">
+        Ошибка {error?.status}
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText id="alert-dialog-description">
+          {error?.message}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose}>Назад</Button>
+      </DialogActions>
+    </Dialog>
   );
 }

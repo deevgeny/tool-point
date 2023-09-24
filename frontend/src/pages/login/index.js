@@ -14,9 +14,11 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
+import ErrorDialog from '../../components/ErrorDialog';
 import useAuth from '../../hooks/useAuth';
+import useError from '../../hooks/useError';
 import Token from '../../services/token';
-import useAxiosApiFunction, { API } from '../../hooks/useAxiosApiFunction';
+import ApiService from '../../services/api';
 
 
 const validationSchema = yup.object({
@@ -31,10 +33,12 @@ const validationSchema = yup.object({
 });
 
 function Login() {
-  const { response, loading, axiosFetch } = useAxiosApiFunction();
-  const { setAuth } = useAuth();
+  const [response, setResponse] = useState({});
   const [message, setMessage] = useState({});
+  const { setError } = useError();
+  const { setAuth } = useAuth();
   const navigate = useNavigate();
+  const controller = new AbortController();
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -44,33 +48,47 @@ function Login() {
     onSubmit: handleFormSubmit
   });
   
-  function handleFormSubmit(values) {
-    axiosFetch(API.login, {data: {...values}, skip: [401, 400]});
+  async function handleFormSubmit(values) {
+    const response = await ApiService.login({
+      body: { ...values },
+      signal: controller.signal
+    });
+    setResponse(response);
   }
 
   useEffect(() => {
-    if (response?.status === 200) {
-      const decodedToken = jose.decodeJwt(response.data.access);
-      setAuth({
-        access: response.data.access,
-        refresh: response.data.refresh,
-        role: decodedToken.role
-      });
-      Token.updateLocalAccessToken(response.data.access);
-      Token.updateLocalRefreshToken(response.data.refresh);
-      navigate('/', { replace: true });
-    } else if (response?.status === 401) {
-      setMessage({
-        status: 'error',
-        text: 'Неверный адрес электронной почты или пароль!'
-      });
-    } else if (response?.status === 400) {
-      setMessage({
-        status: 'error',
-        text: 'Не указаны электронная почта или пароль!'
-      });
+    async function getData() {
+      if (response?.status === 200) {
+        const data = await response.json();
+        const decodedToken = jose.decodeJwt(data.access);
+        setAuth({
+          access: data.access,
+          refresh: data.refresh,
+          role: decodedToken.role
+        });
+        Token.updateLocalAccessToken(data.access);
+        Token.updateLocalRefreshToken(data.refresh);
+        navigate('/', { replace: true });
+      } else if (response?.status === 401) {
+        setMessage({
+          status: 'error',
+          text: 'Неверный адрес электронной почты или пароль!'
+        });
+      } else if (response?.status === 400) {
+        setMessage({
+          status: 'error',
+          text: 'Не указаны электронная почта или пароль!'
+        });
+      } else {
+        setError(response);
+      }
     }
-    // formik.setSubmitting(false);
+
+    getData();
+
+    formik.setSubmitting(false);
+
+    return () => { controller.abort(); }
     
     // eslint-disable-next-line
   }, [response]);
@@ -86,7 +104,7 @@ function Login() {
         }}
       >
         {
-          loading
+          formik.isSubmitting
           ? <CircularProgress />
           : <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
               <LockOutlinedIcon />
@@ -148,6 +166,7 @@ function Login() {
           </Grid>
         </Box>
       </Box>
+      <ErrorDialog />
     </Container>
   );
 }

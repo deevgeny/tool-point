@@ -9,7 +9,7 @@ const {
 const baseUrl = `${API_URL}${API_PREFIX}${API_VERSION}`;
 
 
-class MyFetch {
+class Fetch {
   // fetch() wrapper
   #baseUrl;
   #headers;
@@ -42,9 +42,10 @@ class MyFetch {
     const request = new Request(
       `${this.#baseUrl}${url}`,
       {
-        method: conf?.method || 'GET',
+        method: conf?.method,
         headers: { ...this.#headers },
-        body: conf?.body
+        body: JSON.stringify(conf?.body),
+        signal: conf?.signal
       }
     );
       return request;
@@ -92,13 +93,37 @@ class MyFetch {
       return error;
     }
   }
-
-  async sendRequest(url, conf={}) {
+  
+  get(url, conf = {}) {
     // Main entrypoint to send request or create API function calls
-    const request = this.#createRequest(url, conf);
+    const request = this.#createRequest(url, { method: 'GET', ...conf });
+    return this.#handleRequest(request);
+  }
+
+  post(url, conf={}) {
+    // Main entrypoint to send request or create API function calls
+    const request = this.#createRequest(url, { method: 'POST', ...conf });
+    return this.#handleRequest(request);
+  }
+  
+  put(url, conf = {}) {
+    // Main entrypoint to send request or create API function calls
+    const request = this.#createRequest(url, { method: 'PUT', ...conf });
+    return this.#handleRequest(request);
+  }
+  
+  patch(url, conf = {}) {
+    // Main entrypoint to send request or create API function calls
+    const request = this.#createRequest(url, { method: 'PATCH', ...conf });
+    return this.#handleRequest(request);
+  }
+  
+  delete(url, conf = {}) {
+    // Main entrypoint to send request or create API function calls
+    const request = this.#createRequest(url, { method: 'DELETE', ...conf });
     return this.#handleRequest(request);
   }
 }
 
-const myFetch = new MyFetch(baseUrl);
-export default myFetch;
+const FetchService = new Fetch(baseUrl);
+export default FetchService;
