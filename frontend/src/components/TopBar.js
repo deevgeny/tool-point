@@ -57,7 +57,7 @@ function TopBar({ open, toggleDrawer }) {
   useEffect(() => {
     const controller = new AbortController();
     async function getData() {
-      const response = await ApiService.getUserInfo({
+      const response = await ApiService.getPersonalData({
         signal: controller.signal
       });
       const data = await response.json?.();

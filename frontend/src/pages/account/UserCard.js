@@ -17,16 +17,16 @@ function UserCard() {
   useEffect(() => {
     const controller = new AbortController();
     async function getData() {
-      const response = await ApiService.getUserInfo({
+      setLoading(true);
+      const response = await ApiService.getPersonalData({
         signal: controller.signal
       });
       const data = await response.json?.();
+      setLoading(false);
       setData(data || {});
     }
 
-    setLoading(true);
     getData();
-    setLoading(false);
 
     return () => {
       controller.abort();

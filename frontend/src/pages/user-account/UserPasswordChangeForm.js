@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import Alert from '@mui/material/Alert';
@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import CircularProgress from '@mui/material/CircularProgress';
-import useAxiosApiFunction, { API } from '../../hooks/useAxiosApiFunction';
+import ApiService from '../../services/api';
 
 
 const validationSchema = yup.object({
@@ -24,30 +24,29 @@ const validationSchema = yup.object({
 
 
 function UserPasswordChangeForm() {
-  const { response, loading, axiosFetch } = useAxiosApiFunction();
   const [message, setMessage] = useState({});
   const formik = useFormik({
     initialValues: {
       newPassword: '',
-      retypeNewPassword: '',
+      retypeNewPassword: ''
     },
     validationSchema: validationSchema,
-    onSubmit: handleFormSubmit
+    onSubmit: handleFormSubmit,
   });
 
-  function handleFormSubmit(value) {
-    const data = {
+  async function handleFormSubmit(value) {
+    const body = {
       new_password: value.newPassword,
       re_password: value.retypeNewPassword
-    }
-    axiosFetch(API.changePassword, { data });
-  }
-
-  useEffect(() => {
-    if (response?.status === 200) {
+    };
+    const response = await ApiService.changePassword({ body });
+    if (response.ok) {
       setMessage({ status: 'success', text: 'Пароль успешно обновлен' });
     }
-  }, [response]);
+    formik.setSubmitting(false);
+    formik.resetForm();
+  }
+
 
   return (
     <Box
@@ -73,8 +72,9 @@ function UserPasswordChangeForm() {
           fullWidth
           id='newPassword'
           name='newPassword'
-          type='password'
           label='Новый пароль'
+          type='password'
+          autoComplete='new-password'
           value={formik.values.newPassword}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
@@ -89,6 +89,7 @@ function UserPasswordChangeForm() {
           name='retypeNewPassword'
           label='Повторить новый пароль'
           type='password'
+          autoComplete='new-password'
           value={formik.values.retypeNewPassword}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}

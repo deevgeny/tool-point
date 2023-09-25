@@ -10,7 +10,7 @@ import Box from '@mui/material/Box';
 import InputAdornment from '@mui/material/InputAdornment';
 import CircularProgress from '@mui/material/CircularProgress';
 import PhoneMask from './PhoneMask';
-import useAxiosApiFunction, { API } from '../../hooks/useAxiosApiFunction';
+import ApiService from '../../services/api';
 
 
 const VisuallyHiddenInput = styled('input')`
@@ -46,7 +46,7 @@ const validationSchema = yup.object({
 
 
 function UserEditForm() {
-  const { response, loading, axiosFetch } = useAxiosApiFunction();
+  const [userData, setUserData] = useState({});
   const [message, setMessage] = useState({});
   const formik = useFormik({
     initialValues: {
@@ -57,20 +57,32 @@ function UserEditForm() {
       phone: '',
     },
     validationSchema: validationSchema,
-    onSubmit: handleFormSubmit
+    onSubmit: handleFormSubmit,
   });
-  
-  function handleFormSubmit(values) {
-    const data = {
+ 
+
+  async function handleFormSubmit(values) {
+    const body = {
       first_name: values.firstName,
       middle_name: values.middleName,
       last_name: values.lastName,
       email: values.email,
       phone: values.phone
     };
-    axiosFetch(API.editUserInfo, { data, skip: [400] });
+    const response = await ApiService.editPersonalData({ body });
+    if (response.ok) {
+      const data = await response.json();
+      // Update user data with new values
+      setUserData(data);
+      setMessage({ status: 'success', text: 'Данные успешно обновлены' })
+    } else {
+      // MOCK ERROR: change when form handler will be implemented
+      setMessage({ status: 'error', text: 'Ошибка данных' });
+    }
+    formik.setSubmitting(false);
   }
 
+  
   function tickMarkAdornment() {
     return {
       endAdornment: (
@@ -83,41 +95,44 @@ function UserEditForm() {
       )
     }
   }
-  
+
+
   useEffect(() => {
-    axiosFetch(API.currentUserInfo);
+    // Get initial user data on page load
+    const controller = new AbortController();
+    async function getData() {
+      const response = await ApiService.getPersonalData({
+        signal: controller.signal
+      });
+      const data = await response.json?.();
+      setUserData(data);
+    }
+    
+    getData();
+    
+    return () => {
+      controller.abort();
+    };
     // eslint-disable-next-line
   }, []);
-  
-  useEffect(() => {
-    if (!formik.isSubmitting && response?.status === 200) {
-      // On component load: fill form with current user data
-      formik.initialValues.firstName = response?.data?.first_name || ''
-      formik.initialValues.middleName = response?.data?.middle_name || ''
-      formik.initialValues.lastName = response?.data?.last_name || ''
-      formik.initialValues.email = response?.data?.email || ''
-      formik.initialValues.phone = response?.data?.phone || ''
-      // Fix double requests effect due to rerendering
-      setMessage({}); // Set message to trigger re-render
-    } else if (formik.isSubmitting && response?.status === 200) {
-      // On successful form submit: update message 
-      formik.setSubmitting(false);
-      setMessage({ status: 'success', text: 'Данные успешно обновлены' })
-    } else if (formik.isSubmitting && response) {
-      // On failed form submit: update message
-      formik.setSubmitting(false);
-      // MOCK ERROR: change when form handler will be implemented
-      // console.log(response.data)
-      setMessage({ status: 'error', text: 'Ошибка данных' })
-    }
-    // eslint-disable-next-line
-  }, [response]);
 
-/*   function handleFileUpload(event) {
-    const file = event.target.files[0]
-    console.log(event)
-    console.log(file)
-  } */
+
+  useEffect(() => {
+    // Update form values with user data
+    formik.resetForm({
+      values: {
+        firstName: userData?.first_name || '',
+        middleName: userData?.middle_name || '',
+        lastName: userData?.last_name || '',
+        email: userData?.email || '',
+        phone: userData?.phone || ''
+      }
+    });
+
+    // eslint-disable-next-line
+  }, [userData]);
+  
+
   return (
     <Box
       sx={{
@@ -139,129 +154,99 @@ function UserEditForm() {
         component='form'
         noValidate
         onSubmit={formik.handleSubmit}
-        sx={{
-          mt: 1,
-        }}
-        >
-          <TextField
-            margin='normal'
-            fullWidth
-            id='firstName'
-            name='firstName'
-            label='Имя'
-            /* autoFocus */
-            value={formik.values.firstName}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.firstName && Boolean(formik.errors.firstName)}
-            helperText={formik.touched.firstName && formik.errors.firstName}
-            InputProps={{
-              ...(formik.initialValues.firstName !== formik.values.firstName && tickMarkAdornment()),
-            }}
-          />
-          <TextField
-            margin='normal'
-            fullWidth
-            id='middleName'
-            name='middleName'
-            label='Отчество'
-            /* autoFocus */
-            value={formik.values.middleName}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.middleName && Boolean(formik.errors.middleName)}
-            helperText={formik.touched.middleName && formik.errors.middleName}
-            InputProps={{
-              ...(formik.initialValues.middleName !== formik.values.middleName && tickMarkAdornment()),
-            }}
-          />
-          <TextField
-            margin='normal'
-            fullWidth
-            id='lastName'
-            name='lastName'
-            label='Фамилия'
-            /* autoFocus */
-            value={formik.values.lastName}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.lastName && Boolean(formik.errors.lastName)}
-            helperText={formik.touched.lastName && formik.errors.lastName}
-            InputProps={{
-              ...(formik.initialValues.lastName !== formik.values.lastName && tickMarkAdornment()),
-            }}
-          />
-          <TextField
-            margin='normal'
-            fullWidth
-            id='email'
-            name='email'
-            label='Адрес электронной почты'
-            /* autoFocus */
-            value={formik.values.email}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.email && Boolean(formik.errors.email)}
-            helperText={formik.touched.email && formik.errors.email}
-            InputProps={{
-              ...(formik.initialValues.email !== formik.values.email && tickMarkAdornment()),
-            }}
-          />
-          <TextField
-            margin='normal'
-            fullWidth
-            id='phone'
-            name='phone'
-            label='Номер телефона'
-            /* autoFocus */
-            value={formik.values.phone}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.phone && Boolean(formik.errors.phone)}
-            helperText={formik.touched.phone && formik.errors.phone}
-            InputProps={{
-              ...(formik.initialValues.phone !== formik.values.phone && tickMarkAdornment()),
-              inputComponent: PhoneMask,
-            }}
-          />
-          {message?.status && <Alert severity={message.status}>{message.text}</Alert>}
-          <Button
-            type='submit'
-            variant='contained'
-            sx={{ mt: 3, display: 'block', marginX: 'auto' }}
-          >
-            Сохранить
-          </Button>
-{/*         <Box
-          component='img'
-          display='block'
-          src='/images/blank-avatar.png'
-          sx={{
-            width: '100px',
-            height: '100px',
-            mx: 'auto'
+        sx={{ mt: 1 }}
+      >
+        <TextField
+          margin='normal'
+          fullWidth
+          id='firstName'
+          name='firstName'
+          label='Имя'
+          /* autoFocus */
+          value={formik.values.firstName}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.touched.firstName && Boolean(formik.errors.firstName)}
+          helperText={formik.touched.firstName && formik.errors.firstName}
+          InputProps={{
+            ...(formik.initialValues.firstName !== formik.values.firstName && tickMarkAdornment()),
           }}
         />
-      <Button component='label'>
-        Загрузить фото
-        <input
-          id='photo'
-          type='file'
-          accept='image/*'
-          hidden
-          onChange={handleFileUpload}
+        <TextField
+          margin='normal'
+          fullWidth
+          id='middleName'
+          name='middleName'
+          label='Отчество'
+          /* autoFocus */
+          value={formik.values.middleName}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.touched.middleName && Boolean(formik.errors.middleName)}
+          helperText={formik.touched.middleName && formik.errors.middleName}
+          InputProps={{
+            ...(formik.initialValues.middleName !== formik.values.middleName && tickMarkAdornment()),
+          }}
         />
-      </Button>
-      <Button
-        component="label"
-        href="#file-upload"
-      >
-        Upload a file
-        <VisuallyHiddenInput type='file' id='file' accept='image/*' />
-      </Button>
-      <Typography variant='body2'>val</Typography> */}
+        <TextField
+          margin='normal'
+          fullWidth
+          id='lastName'
+          name='lastName'
+          label='Фамилия'
+          /* autoFocus */
+          value={formik.values.lastName}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.touched.lastName && Boolean(formik.errors.lastName)}
+          helperText={formik.touched.lastName && formik.errors.lastName}
+          InputProps={{
+            ...(formik.initialValues.lastName !== formik.values.lastName && tickMarkAdornment()),
+          }}
+        />
+        <TextField
+          margin='normal'
+          fullWidth
+          id='email'
+          name='email'
+          label='Адрес электронной почты'
+          /* autoFocus */
+          value={formik.values.email}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.touched.email && Boolean(formik.errors.email)}
+          helperText={formik.touched.email && formik.errors.email}
+          InputProps={{
+            ...(formik.initialValues.email !== formik.values.email && tickMarkAdornment()),
+          }}
+        />
+        <TextField
+          margin='normal'
+          fullWidth
+          id='phone'
+          name='phone'
+          label='Номер телефона'
+          /* autoFocus */
+          value={formik.values.phone}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.touched.phone && Boolean(formik.errors.phone)}
+          helperText={formik.touched.phone && formik.errors.phone}
+          InputProps={{
+            ...(formik.initialValues.phone !== formik.values.phone && tickMarkAdornment()),
+            inputComponent: PhoneMask,
+          }}
+        />
+        {message?.status && <Alert severity={message.status}>{message.text}</Alert>}
+        <Button
+          type='submit'
+          variant='contained'
+          sx={{ mt: 3, display: 'block', marginX: 'auto' }}
+        >
+          Сохранить
+        </Button>
+      </Box>
     </Box>
-</Box>
   );
 }
 

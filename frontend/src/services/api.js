@@ -20,11 +20,11 @@ class Api {
     return this.fetch.post('/users', conf);
   }
 
-  getUserInfo(conf) {
+  getPersonalData(conf) {
     return this.fetch.get('/users/me', conf);
   }
 
-  editUserInfo(conf) {
+  editPersonalData(conf) {
     return this.fetch.patch('/users/me', conf);
   }
 

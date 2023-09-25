@@ -20,7 +20,6 @@ class Fetch {
   }
 
   #updateHeadersAuthorization() {
-    // Update access token in headers.Authorization from local storage
     const token = TokenService.getAccessToken();
     if (token) {
       this.#headers.Authorization = `Bearer ${token}`;
@@ -30,14 +29,12 @@ class Fetch {
   }
 
   #addHeadersAuthorization() {
-    // Add access token to headers.Authorization
     if (!this.#headers?.Authorization) {
       this.#updateHeadersAuthorization();
     }
   }
 
   #createRequest(url, conf) {
-    // Create request object
     this.#addHeadersAuthorization();
     const request = new Request(
       `${this.#baseUrl}${url}`,
@@ -51,44 +48,35 @@ class Fetch {
       return request;
   }
 
-  async #refreshAccessToken() {
-    // Send request and refresh access token
-    if (TokenService.isRefreshTokenValid()) {
-      const headers = { ...this.#headers };
-      delete headers.Authorization;
-      const request = new Request(`${this.#baseUrl}/auth/token/refresh`, {
-        method: 'POST',
-        body: JSON.stringify({ refresh: TokenService.getRefreshToken() })
-      });
-      try {
-        const response = await fetch(request);
-        if (response.ok) {
-          const data = await response.json();
-          TokenService.updateAccessToken(data.access);
-        } else {
-          // Handle non 200's responses
-        }
-      } catch (error) {
-        // Handle fetch error
-      }
-    } else {
-      TokenService.clear();
-    }
-  }
-  
-  async #handleRequest(request, refreshed=false) {
-    // Handle main request
+  async #handleRequest(request) {
     try {
-      const response = await fetch(request);
-      if (response?.status === 401 && !refreshed) {
-        this.#refreshAccessToken();
-        this.#updateHeadersAuthorization();
-        const newRequest = new Request(request, {
-          headers: { ...this.#headers }
-        });
-        return this.#handleRequest(newRequest, true);
-      } else if (response?.status === 401 && refreshed) {
-        TokenService.clear();
+      let response = await fetch(request);
+      // If access token is not valid
+      if (response?.status === 401 && !TokenService.isAccessTokenValid()) {
+        // If refresh token is valid (try to refresh access token)
+        if (TokenService.isRefreshTokenValid()) {
+          // Prepare refresh token request
+          const headers = { ...this.#headers };
+          delete headers.Authorization;
+          const req = new Request(`${this.#baseUrl}/auth/token/refresh`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({ refresh: TokenService.getRefreshToken() })
+          });
+          // Send refresh token request
+          const refreshRequest = await fetch(req);
+          const data = await refreshRequest.json();
+          // Update access token in local storage and update headers
+          TokenService.updateAccessToken(data.access);
+          this.#updateHeadersAuthorization();
+          // Update original request with new headers and resend it
+          const newRequest = new Request(request, {
+            headers: { ...this.#headers }
+          });
+          response = await fetch(newRequest);
+        } else {
+          TokenService.clear();
+        }
       }
       return response;
     } catch (error) {

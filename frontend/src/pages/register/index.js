@@ -73,7 +73,7 @@ function Register() {
   }
 
   useEffect(() => {
-    async function getData() {
+    async function handleFormSubmitResponse() {
       if (response?.status === 201) {
         setMessage({
           status: 'success',
@@ -90,7 +90,7 @@ function Register() {
       }
     }
 
-    getData();
+    handleFormSubmitResponse();
 
     return () => {
       controller.abort();
