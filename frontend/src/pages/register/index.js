@@ -12,8 +12,8 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import Alert from '@mui/material/Alert';
 import ErrorDialog from '../../components/ErrorDialog';
+import FormAlert from '../../components/FormAlert';
 import useError from '../../hooks/useError';
 import ApiService from '../../services/api';
 
@@ -58,6 +58,7 @@ function Register() {
     onSubmit: handleFormSubmit
   });
 
+
   async function handleFormSubmit(values) {
     const body = {
       first_name: values.firstName,
@@ -77,17 +78,20 @@ function Register() {
       if (response?.status === 201) {
         setMessage({
           status: 'success',
-          text: ['Поздравляем с успешной регистрацией! Через несколько секунд вы будете перенаправлены на страницу авторизации.']
+          text: 'Поздравляем с успешной регистрацией! Через несколько секунд вы будете перенаправлены на страницу авторизации.'
         });
         setTimeout(() => {
           navigate('/', { replace: true });
         }, 5000);
+        formik.resetForm();
       } else if (response?.status === 400) {
         const data = await response.json?.();
-        setMessage({ status: 'error', text: Object.values(data)[0] });
+        setMessage({ data });
       } else {
         setError(response);
+        formik.resetForm();
       }
+      formik.setSubmitting(false);
     }
 
     handleFormSubmitResponse();
@@ -200,7 +204,7 @@ function Register() {
               />
             </Grid>
           </Grid>
-          {message?.status && message.text.map((item, id) => <Alert severity={message.status} key={id}>{item}</Alert>)}    
+          <FormAlert message={message} />
           <Button
             type='submit'
             variant='contained'

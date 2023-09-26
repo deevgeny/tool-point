@@ -5,11 +5,7 @@ import Grid from '@mui/material/Grid';
 
 
 function Home() {
-  function handleFileUpload(event) {
-    const file = event.target.files[0]
-    console.log(event)
-    console.log(file)
-  }
+
   return (
     <Container maxWidth='lg' sx={{ mt: 4, mb: 4 }}>
       <Grid

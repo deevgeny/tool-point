@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import CircularProgress from '@mui/material/CircularProgress';
+import FormAlert from '../../components/FormAlert';
 import ApiService from '../../services/api';
 
 
@@ -40,8 +41,11 @@ function UserPasswordChangeForm() {
       re_password: value.retypeNewPassword
     };
     const response = await ApiService.changePassword({ body });
-    if (response.ok) {
+    if (response?.status === 200) {
       setMessage({ status: 'success', text: 'Пароль успешно обновлен' });
+    } else if (response?.status === 400) {
+      const data = await response.json?.();
+      setMessage({ data });
     }
     formik.setSubmitting(false);
     formik.resetForm();
@@ -96,7 +100,7 @@ function UserPasswordChangeForm() {
           error={formik.touched.retypeNewPassword && Boolean(formik.errors.retypeNewPassword)}
           helperText={formik.touched.retypeNewPassword && formik.errors.retypeNewPassword}
         />
-        {message?.status && <Alert severity={message.status}>{message.text}</Alert>}
+        <FormAlert message={message} />
         <Button
           type='submit'
           variant='contained'

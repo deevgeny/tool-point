@@ -1,29 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
-import { styled } from '@mui/material/styles';
-import Alert from '@mui/material/Alert';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import InputAdornment from '@mui/material/InputAdornment';
 import CircularProgress from '@mui/material/CircularProgress';
+import FormAlert from '../../components/FormAlert';
 import PhoneMask from './PhoneMask';
 import ApiService from '../../services/api';
 
-
-const VisuallyHiddenInput = styled('input')`
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  height: 1px;
-  overflow: hidden;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  white-space: nowrap;
-  width: 1px;
-`;
 
 const validationSchema = yup.object({
   firstName: yup
@@ -40,7 +27,7 @@ const validationSchema = yup.object({
     .required('Обязательное поле'),
   phone: yup
     .string('Укажите номер телефона')
-    .matches(/^\+\d{1}[^\S\r\n\t]\(\d{3}\)[^\S\r\n\t]\d{3}\-\d{2}-\d{2}$/, 'Неверный формат номера')
+    .matches(/^\+\d{1}[^\S\r\n\t]\(\d{3}\)[^\S\r\n\t]\d{3}-\d{2}-\d{2}$/, 'Неверный формат номера')
     // regexp match +7 (000) 000-00-00
 });
 
@@ -70,14 +57,14 @@ function UserEditForm() {
       phone: values.phone
     };
     const response = await ApiService.editPersonalData({ body });
-    if (response.ok) {
+    if (response?.status === 200) {
       const data = await response.json();
       // Update user data with new values
       setUserData(data);
       setMessage({ status: 'success', text: 'Данные успешно обновлены' })
     } else {
-      // MOCK ERROR: change when form handler will be implemented
-      setMessage({ status: 'error', text: 'Ошибка данных' });
+      const data = await response?.json?.();
+      setMessage({ data });
     }
     formik.setSubmitting(false);
   }
@@ -104,7 +91,7 @@ function UserEditForm() {
       const response = await ApiService.getPersonalData({
         signal: controller.signal
       });
-      const data = await response.json?.();
+      const data = await response?.json?.();
       setUserData(data);
     }
     
@@ -237,7 +224,7 @@ function UserEditForm() {
             inputComponent: PhoneMask,
           }}
         />
-        {message?.status && <Alert severity={message.status}>{message.text}</Alert>}
+        <FormAlert message={message} />
         <Button
           type='submit'
           variant='contained'

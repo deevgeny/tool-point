@@ -13,8 +13,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import CircularProgress from '@mui/material/CircularProgress';
-import Alert from '@mui/material/Alert';
 import ErrorDialog from '../../components/ErrorDialog';
+import FormAlert from '../../components/FormAlert';
 import useAuth from '../../hooks/useAuth';
 import useError from '../../hooks/useError';
 import TokenService from '../../services/token';
@@ -75,10 +75,8 @@ function Login() {
           text: 'Неверный адрес электронной почты или пароль!'
         });
       } else if (response?.status === 400) {
-        setMessage({
-          status: 'error',
-          text: 'Не указаны электронная почта или пароль!'
-        });
+        const data = await response?.json?.();
+        setMessage({ data });
       } else {
         setError(response);
       }
@@ -146,7 +144,7 @@ function Login() {
             error={formik.touched.password && Boolean(formik.errors.password)}
             helperText={formik.touched.password && formik.errors.password}
           />
-          {message?.status && <Alert severity={message.status}>{message.text}</Alert>}
+          <FormAlert message={message} />
           <Button
             type='submit'
             variant='contained'

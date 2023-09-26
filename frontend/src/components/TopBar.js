@@ -60,7 +60,7 @@ function TopBar({ open, toggleDrawer }) {
       const response = await ApiService.getPersonalData({
         signal: controller.signal
       });
-      const data = await response.json?.();
+      const data = await response?.json?.();
       setData(data || {});
     }
 

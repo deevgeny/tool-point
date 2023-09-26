@@ -46,11 +46,11 @@ class Token {
   }
 
   getAuthContext() {
-    if (this.isAccessTokenValid() || this.isRefreshTokenValid()) {
+    if (this.isRefreshTokenValid()) {
       return {
         access: this.getAccessToken(),
         refresh: this.getRefreshToken(),
-        role: jose.decodeJwt(this.getAccessToken()).role
+        role: jose.decodeJwt(this.getAccessToken())?.role
       };
     }
     return {};

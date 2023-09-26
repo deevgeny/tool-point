@@ -21,7 +21,7 @@ function UserCard() {
       const response = await ApiService.getPersonalData({
         signal: controller.signal
       });
-      const data = await response.json?.();
+      const data = await response?.json?.();
       setLoading(false);
       setData(data || {});
     }
