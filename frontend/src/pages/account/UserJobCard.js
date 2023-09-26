@@ -21,6 +21,7 @@ function UserJobCard() {
         <Typography variant='body1'>Подразделение</Typography>
         <Typography variant='body1'>Отдел</Typography>
         <Typography variant='body1'>Должность</Typography>
+        <Typography variant='body2'>(Данный функционал находится в разработке)</Typography>
       </CardContent>
       <CardActions>
         <NavButton to='#'>Войти</NavButton>
