@@ -3,16 +3,17 @@ import Button from '@mui/material/Button';
 import { Link as RouterLink } from 'react-router-dom';
 
 
-function NavButton({children, to}) {
+function RouterLinkButton(props) {
+  const { children, ...buttonProps } = props;
   return (
     <Button
       size='small'
-      to={to || '#'}
       component={RouterLink}
+      { ...buttonProps }
     >
       {children}
     </Button>
   );
 }
 
-export default NavButton;
+export default RouterLinkButton;

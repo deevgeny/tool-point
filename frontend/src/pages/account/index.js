@@ -3,6 +3,7 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import UserCard from './UserCard';
 import UserJobCard from './UserJobCard';
+import RouterBackButton from '../../components/RouterBackButton';
 
 function Account() {
   return (
@@ -20,6 +21,7 @@ function Account() {
           <UserJobCard/>
         </Grid>
       </Grid>
+      <RouterBackButton />
     </Container>
   );
 }

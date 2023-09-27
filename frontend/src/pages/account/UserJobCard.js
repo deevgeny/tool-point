@@ -4,7 +4,7 @@ import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
-import NavButton from '../../components/NavButton';
+import RouterLinkButton from '../../components/RouterLinkButton';
 
 
 function UserJobCard() {
@@ -24,7 +24,7 @@ function UserJobCard() {
         <Typography variant='body2'>(Данный функционал находится в разработке)</Typography>
       </CardContent>
       <CardActions>
-        <NavButton to='#'>Войти</NavButton>
+        <RouterLinkButton to='#'>Войти</RouterLinkButton>
       </CardActions>
     </Card>
   );

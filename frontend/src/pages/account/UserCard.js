@@ -6,7 +6,7 @@ import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
-import NavButton from '../../components/NavButton';
+import RouterLinkButton from '../../components/RouterLinkButton';
 import ApiService from '../../services/api';
 
 
@@ -81,9 +81,9 @@ function UserCard() {
         }
       </CardContent>
       <CardActions>
-        <NavButton to='/account/user'>
+        <RouterLinkButton to='/account/user'>
           Редактировать
-        </NavButton>
+        </RouterLinkButton>
       </CardActions>
     </Card>
   );
