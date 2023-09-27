@@ -132,6 +132,14 @@ def test_photo_field_upload_to_attr():
     )
 
 
+def test_user_model_login_field():
+    username_field = 'email'
+    assert User.USERNAME_FIELD == username_field, (
+        'User.USERNAME_FIELD should be defined as '
+        f'USERNAME_FIELD = {username_field}'
+    )
+
+
 def test_profile_photo_func():
     # Arrange
     user = User()
@@ -145,9 +153,9 @@ def test_profile_photo_func():
     )
 
 
-def test_user_model_login_field():
-    username_field = 'email'
-    assert User.USERNAME_FIELD == username_field, (
-        'User.USERNAME_FIELD should be defined as '
-        f'USERNAME_FIELD = {username_field}'
-    )
+def test_phone_validator_func():
+    correct_phone = '+7 (000) 000-00-00'
+    try:
+        phone_validator(correct_phone)
+    except ValidationError:
+        assert False, 'Неправильная работа функции валидации номера'
