@@ -17,7 +17,7 @@ import WarehouseIcon from '@mui/icons-material/Warehouse';
 import LayersIcon from '@mui/icons-material/Layers';
 import Tooltip from '@mui/material/Tooltip';
 import { useNavigate } from 'react-router-dom';
-import { drawerWidth } from '../utils/constants'; 
+import { drawerWidth } from '../../utils/constants'; 
 
 
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(

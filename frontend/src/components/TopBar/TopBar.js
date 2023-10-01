@@ -10,11 +10,11 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import NoAccountsIcon from '@mui/icons-material/NoAccounts';
-import useAuthContext from '../hooks/useAuth';
-import ApiService from '../services/api';
-import TokenService from '../services/token';
-import { get_page_title } from '../utils/title';
-import { drawerWidth } from '../utils/constants';
+import useAuthContext from '../../hooks/useAuth';
+import ApiService from '../../services/api';
+import TokenService from '../../services/token';
+import { get_page_title } from '../../utils/title';
+import { drawerWidth } from '../../utils/constants';
 
 
 const AppBar = styled(MuiAppBar, {

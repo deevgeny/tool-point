@@ -5,8 +5,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { errorStatusMessage } from '../utils/constants';
-import useError from '../hooks/useError';
+import { errorStatusMessage } from '../../utils/constants';
+import useError from '../../hooks/useError';
 
 
 export default function ErrorDialog() {

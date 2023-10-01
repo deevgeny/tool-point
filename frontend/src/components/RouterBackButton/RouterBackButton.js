@@ -1,7 +1,11 @@
 import React from 'react';
-import RouterLinkButton from './RouterLinkButton';
+import RouterLinkButton from '../RouterLinkButton';
 
-
+/**
+ * React router back button (back navigation button).
+ * 
+ * @returns {RouterLinkButton} - RouterLinkButton with customized props.
+ */
 function RouterBackButton() {
   return (
     <RouterLinkButton
