@@ -51,7 +51,7 @@ class Fetch {
   async #handleRequest(request) {
     try {
       let response = await fetch(request);
-      // If access token is not valid
+      // If HTTP 401 and access token is not valid
       if (response?.status === 401 && !TokenService.isAccessTokenValid()) {
         // If refresh token is valid (try to refresh access token)
         if (TokenService.isRefreshTokenValid()) {
@@ -80,6 +80,8 @@ class Fetch {
       }
       return response;
     } catch (error) {
+      // Add status to trigger ErrorDialog message open
+      error.status = error.message;
       return error;
     }
   }

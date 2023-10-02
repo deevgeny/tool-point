@@ -2,7 +2,7 @@ import React from 'react';
 import Typography from '@mui/material/Typography';
 
 /**
- * A title component.
+ * Title component.
  *
  * @param {} props - All props from parent component.
  * @returns {@mui/meterial/Typography} - MUI Typography element.
