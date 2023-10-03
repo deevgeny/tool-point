@@ -41,7 +41,7 @@ function UserPasswordChangeForm() {
     };
     const response = await ApiService.changePassword({ body });
     if (response?.status === 200) {
-      setMessage({ status: 'success', text: 'Пароль успешно обновлен' });
+      setMessage({ severity: 'success', text: 'Пароль успешно обновлен!' });
     } else if (response?.status === 400) {
       const data = await response.json?.();
       setMessage({ data });

@@ -77,7 +77,7 @@ function Register() {
     async function handleFormSubmitResponse() {
       if (response?.status === 201) {
         setMessage({
-          status: 'success',
+          severity: 'success',
           text: 'Поздравляем с успешной регистрацией! Через несколько секунд вы будете перенаправлены на страницу авторизации.'
         });
         setTimeout(() => {

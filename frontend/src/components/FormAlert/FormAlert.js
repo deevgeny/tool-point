@@ -18,9 +18,9 @@ function FormAlert({ message }) {
         )}
       </>
     );
-  } else if (message?.status) {
+  } else if (message?.severity) {
     return (
-      <Alert severity={message.status}>
+      <Alert severity={message.severity}>
         {message.text}
       </Alert>
     );

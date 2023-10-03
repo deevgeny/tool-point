@@ -61,7 +61,7 @@ function UserEditForm() {
       const data = await response.json();
       // Update user data with new values
       setUserData(data);
-      setMessage({ status: 'success', text: 'Данные успешно обновлены' })
+      setMessage({ severity: 'success', text: 'Данные успешно обновлены!' })
     } else {
       const data = await response?.json?.();
       setMessage({ data });

@@ -71,7 +71,7 @@ function Login() {
         navigate('/', { replace: true });
       } else if (response?.status === 401) {
         setMessage({
-          status: 'error',
+          severity: 'error',
           text: 'Неверный адрес электронной почты или пароль!'
         });
       } else if (response?.status === 400) {
