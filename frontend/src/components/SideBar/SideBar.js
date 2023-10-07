@@ -52,7 +52,7 @@ function SideBar({ open, toggleDrawer }) {
 
   useEffect(() => {
     open ? setPlacement('top') : setPlacement('right')
-  },[open]) 
+  }, [open]); 
 
   return (
     <Drawer variant='permanent' open={open}>
@@ -66,7 +66,7 @@ function SideBar({ open, toggleDrawer }) {
       >
       <IconButton onClick={toggleDrawer}>
         <Tooltip title='Свернуть' placement='left'>
-        <ChevronLeftIcon />
+          <ChevronLeftIcon />
         </Tooltip>
       </IconButton>
       </Toolbar>

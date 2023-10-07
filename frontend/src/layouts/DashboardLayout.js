@@ -7,7 +7,7 @@ import { Outlet } from 'react-router-dom';
 import ErrorDialog from '../components/ErrorDialog';
 
 
-function HomeLayout() {
+function DashboardLayout() {
   const [open, setOpen] = useState(false);
   
   function toggleDrawer() {
@@ -27,4 +27,4 @@ function HomeLayout() {
   );
 }
 
-export default HomeLayout;
+export default DashboardLayout;

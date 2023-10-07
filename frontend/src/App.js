@@ -5,7 +5,7 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import MainLayout from './layouts/MainLayout';
-import HomeLayout from './layouts/HomeLayout';
+import DashboardLayout from './layouts/DashboardLayout';
 import {
   Login,
   Register,
@@ -39,7 +39,7 @@ function App() {
         
         {/* Protected routes */}
         <Route element={<AuthorizedOnly allowedRoles={[ROLES.User]} />}>
-          <Route element={<HomeLayout />}>
+          <Route element={<DashboardLayout />}>
             <Route path='/' element={<Home />} />
             <Route path='/account' element={<Account />} />
             <Route path='/account/user' element={<UserAccount />} />
