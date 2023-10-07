@@ -49,11 +49,6 @@ function TopBar({ open, toggleDrawer }) {
     setAuth({});
   }
 
-  function handleAccount() {
-    navigate('/account');
-
-  }
-
   useEffect(() => {
     const controller = new AbortController();
     async function getData() {
@@ -107,7 +102,11 @@ function TopBar({ open, toggleDrawer }) {
           {pageTitle}
         </Typography>
         <Tooltip title='Мой аккаунт'>
-          <IconButton color='inherit' size='small' onClick={handleAccount}>
+          <IconButton
+            color='inherit'
+            size='small'
+            onClick={() => { navigate('/account') }}
+          >
             <Avatar>
               {
                 data?.first_name
