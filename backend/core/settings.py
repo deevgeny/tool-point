@@ -43,9 +43,11 @@ INSTALLED_APPS = [
     'djoser',
     'django_filters',
     'drf_yasg',
-    'users.apps.UsersConfig',
-    'api_v1.apps.ApiV1Config',
-    'docs.apps.DocsConfig',
+    'users',
+    'api_v1',
+    'docs',
+    'products',
+    'specifications'
 ]
 
 MIDDLEWARE = [
@@ -59,7 +61,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'config.urls'
+ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
     {
@@ -77,7 +79,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'config.wsgi.application'
+WSGI_APPLICATION = 'core.wsgi.application'
 
 
 # Database
@@ -182,3 +184,21 @@ CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split()
 # CORS_ALLOW_CREDENTIALS = True
 
 SECURE_PROXY_SSL_HEADER = ['HTTP_X_FORWARDED_PROTO', 'https']
+
+# Logging
+
+""" LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'products_signals': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
+    },
+} """
