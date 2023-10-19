@@ -1,9 +1,23 @@
 from django.contrib import admin
 
 from .models import (
-    Uom, Method, Density, SolidContent, Ph, AcidMeq, BaseMeq, SolventContent,
-    Conductivity, HegmanFineness, Viscosity, Thickness, Gloss, Adhesion,
-    Roughness, Resistivity, HidingPower
+    AcidMeq,
+    Adhesion,
+    BaseMeq,
+    Conductivity,
+    Density,
+    Gloss,
+    HegmanFineness,
+    HidingPower,
+    Method,
+    Ph,
+    Resistivity,
+    Roughness,
+    SolidContent,
+    SolventContent,
+    Thickness,
+    Uom,
+    Viscosity,
 )
 
 

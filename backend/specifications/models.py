@@ -16,7 +16,7 @@ class Uom(models.Model):
     class Meta:
         verbose_name = 'единица измерения'
         verbose_name_plural = 'единицы измерения'
-    
+
     def __str__(self):
         return f'{self.name}'
 
@@ -31,7 +31,7 @@ class Method(models.Model):
     class Meta:
         verbose_name = 'метод'
         verbose_name_plural = 'методы'
-    
+
     def __str__(self):
         return f'{self.name}'
 

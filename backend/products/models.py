@@ -1,9 +1,21 @@
 from django.db import models
 
 from specifications.models import (
-    Density, SolidContent, Ph, AcidMeq, BaseMeq, SolventContent, Conductivity,
-    HegmanFineness, Viscosity, Thickness, Gloss, Adhesion, Roughness,
-    Resistivity, HidingPower
+    AcidMeq,
+    Adhesion,
+    BaseMeq,
+    Conductivity,
+    Density,
+    Gloss,
+    HegmanFineness,
+    HidingPower,
+    Ph,
+    Resistivity,
+    Roughness,
+    SolidContent,
+    SolventContent,
+    Thickness,
+    Viscosity,
 )
 
 
@@ -23,7 +35,7 @@ class Product(models.Model):
     class Meta:
         verbose_name = 'продукт'
         verbose_name_plural = 'продукты'
-    
+
     def __str__(self):
         return f'{self.code}'
 
@@ -34,7 +46,7 @@ class Product(models.Model):
             ProductSpecification.objects.create(product=self)
             return
         super().save(*args, **kwargs)
-    
+
 
 class ProductSpecification(models.Model):
     """Product specification model."""
@@ -50,7 +62,8 @@ class ProductSpecification(models.Model):
         Product,
         on_delete=models.CASCADE,
         primary_key=True,
-        related_name='specification'
+        related_name='specification',
+        verbose_name='продукт'
     )
     density = models.OneToOneField(
         Density,
@@ -176,14 +189,14 @@ class ProductSpecification(models.Model):
     class Meta:
         verbose_name = 'спецификация продукта'
         verbose_name_plural = 'спецификации продуктов'
-    
+
     def __str__(self):
         return f'{self.product} спецификация'
-    
+
     def delete(self, *args, **kwargs):
-        """Override to delete objects in one-to-one fields."""
+        """Override to delete referenced objects in one-to-one fields."""
         obj = super().delete(*args, **kwargs)
         for field in ProductSpecification.CLEAN_ON_DELETE:
             if getattr(self, field):
                 getattr(self, field).delete()
-        return obj
+        return obj  # noqa R504
