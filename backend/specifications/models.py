@@ -5,7 +5,8 @@ class Uom(models.Model):
     """Unit of measure model."""
     name = models.CharField(
         verbose_name='Сокращенное наименование единицы измерения',
-        max_length=8
+        max_length=8,
+        unique=True
     )
     description = models.CharField(
         verbose_name='Описание',
@@ -36,8 +37,8 @@ class Method(models.Model):
         return f'{self.name}'
 
 
-class AbstractSpecification(models.Model):
-    """Base abstract specification model."""
+class AbstractIntegerSpecification(models.Model):
+    """Base abstract integer specification model."""
     method = models.ForeignKey(
         Method,
         verbose_name='Метод',
@@ -74,7 +75,7 @@ class AbstractSpecification(models.Model):
         abstract = True
 
 
-class Density(AbstractSpecification):
+class Density(AbstractIntegerSpecification):
     """Density specification model."""
     min_value = models.DecimalField(
         verbose_name='Минимальное значение',
@@ -96,7 +97,7 @@ class Density(AbstractSpecification):
         verbose_name_plural = 'плотность'
 
 
-class SolidContent(AbstractSpecification):
+class SolidContent(AbstractIntegerSpecification):
     """Solid content specification model."""
     min_value = models.DecimalField(
         verbose_name='Минимальное значение',
@@ -118,7 +119,7 @@ class SolidContent(AbstractSpecification):
         verbose_name_plural = 'сухой остаток'
 
 
-class Ph(AbstractSpecification):
+class Ph(AbstractIntegerSpecification):
     """Ph specification model."""
     min_value = models.DecimalField(
         verbose_name='Минимальное значение',
@@ -140,7 +141,7 @@ class Ph(AbstractSpecification):
         verbose_name_plural = 'ph'
 
 
-class AcidMeq(AbstractSpecification):
+class AcidMeq(AbstractIntegerSpecification):
     """Acid mEq specification model."""
     min_value = models.DecimalField(
         verbose_name='Минимальное значение',
@@ -162,7 +163,7 @@ class AcidMeq(AbstractSpecification):
         verbose_name_plural = 'Эквивалентная масса кислоты'
 
 
-class BaseMeq(AbstractSpecification):
+class BaseMeq(AbstractIntegerSpecification):
     """Base mEq specification model."""
     min_value = models.DecimalField(
         verbose_name='Минимальное значение',
@@ -184,7 +185,7 @@ class BaseMeq(AbstractSpecification):
         verbose_name_plural = 'Эквивалентная масса основания'
 
 
-class SolventContent(AbstractSpecification):
+class SolventContent(AbstractIntegerSpecification):
     """Solvent content specification model."""
     min_value = models.DecimalField(
         verbose_name='Минимальное значение',
@@ -206,7 +207,7 @@ class SolventContent(AbstractSpecification):
         verbose_name_plural = 'Содержание сольвентов'
 
 
-class Conductivity(AbstractSpecification):
+class Conductivity(AbstractIntegerSpecification):
     """Conductivity specification model."""
 
     class Meta:
@@ -214,7 +215,7 @@ class Conductivity(AbstractSpecification):
         verbose_name_plural = 'Электропроводность'
 
 
-class HegmanFineness(AbstractSpecification):
+class HegmanFineness(AbstractIntegerSpecification):
     """Hegman fineness specification model."""
 
     class Meta:
@@ -222,7 +223,7 @@ class HegmanFineness(AbstractSpecification):
         verbose_name_plural = 'Степень перетира по Хегману'
 
 
-class Viscosity(AbstractSpecification):
+class Viscosity(AbstractIntegerSpecification):
     """Viscosity specification model."""
 
     class Meta:
@@ -230,7 +231,7 @@ class Viscosity(AbstractSpecification):
         verbose_name_plural = 'Вязкость'
 
 
-class Thickness(AbstractSpecification):
+class Thickness(AbstractIntegerSpecification):
     """Thickness specification model."""
 
     class Meta:
@@ -238,7 +239,7 @@ class Thickness(AbstractSpecification):
         verbose_name_plural = 'Толщина покрытия'
 
 
-class Gloss(AbstractSpecification):
+class Gloss(AbstractIntegerSpecification):
     """Gloss specification model."""
 
     class Meta:
@@ -246,7 +247,7 @@ class Gloss(AbstractSpecification):
         verbose_name_plural = 'Блеск'
 
 
-class Adhesion(AbstractSpecification):
+class Adhesion(AbstractIntegerSpecification):
     """Adhesion specification model."""
 
     class Meta:
@@ -254,7 +255,7 @@ class Adhesion(AbstractSpecification):
         verbose_name_plural = 'Адгезия'
 
 
-class Roughness(AbstractSpecification):
+class Roughness(AbstractIntegerSpecification):
     """Roughness specification model."""
 
     class Meta:
@@ -262,7 +263,7 @@ class Roughness(AbstractSpecification):
         verbose_name_plural = 'Шероховатость'
 
 
-class Resistivity(AbstractSpecification):
+class Resistivity(AbstractIntegerSpecification):
     """Resistivity specification model."""
 
     class Meta:
@@ -270,7 +271,7 @@ class Resistivity(AbstractSpecification):
         verbose_name_plural = 'Удельное сопротивление'
 
 
-class HidingPower(AbstractSpecification):
+class HidingPower(AbstractIntegerSpecification):
     """Hiding power specification model."""
 
     class Meta:

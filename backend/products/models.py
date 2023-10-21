@@ -69,7 +69,7 @@ class ProductSpecification(models.Model):
         Density,
         verbose_name=Density._meta.verbose_name,
         on_delete=models.PROTECT,
-        related_name='product_specification',
+        related_name='product_spec',
         blank=True,
         null=True
     )
@@ -77,7 +77,7 @@ class ProductSpecification(models.Model):
         SolidContent,
         verbose_name=SolidContent._meta.verbose_name,
         on_delete=models.PROTECT,
-        related_name='product_specification',
+        related_name='product_spec',
         blank=True,
         null=True
     )
@@ -85,7 +85,7 @@ class ProductSpecification(models.Model):
         Ph,
         verbose_name=Ph._meta.verbose_name,
         on_delete=models.PROTECT,
-        related_name='product_specification',
+        related_name='product_spec',
         blank=True,
         null=True
     )
@@ -93,7 +93,7 @@ class ProductSpecification(models.Model):
         AcidMeq,
         verbose_name=AcidMeq._meta.verbose_name,
         on_delete=models.PROTECT,
-        related_name='product_specification',
+        related_name='product_spec',
         blank=True,
         null=True
     )
@@ -101,7 +101,7 @@ class ProductSpecification(models.Model):
         BaseMeq,
         verbose_name=BaseMeq._meta.verbose_name,
         on_delete=models.PROTECT,
-        related_name='product_specification',
+        related_name='product_spec',
         blank=True,
         null=True
     )
@@ -109,7 +109,7 @@ class ProductSpecification(models.Model):
         SolventContent,
         verbose_name=SolventContent._meta.verbose_name,
         on_delete=models.PROTECT,
-        related_name='product_specification',
+        related_name='product_spec',
         blank=True,
         null=True
     )
@@ -117,7 +117,7 @@ class ProductSpecification(models.Model):
         Conductivity,
         verbose_name=Conductivity._meta.verbose_name,
         on_delete=models.PROTECT,
-        related_name='product_specification',
+        related_name='product_spec',
         blank=True,
         null=True
     )
@@ -125,7 +125,7 @@ class ProductSpecification(models.Model):
         HegmanFineness,
         verbose_name=HegmanFineness._meta.verbose_name,
         on_delete=models.PROTECT,
-        related_name='product_specification',
+        related_name='product_spec',
         blank=True,
         null=True
     )
@@ -133,7 +133,7 @@ class ProductSpecification(models.Model):
         Viscosity,
         verbose_name=Viscosity._meta.verbose_name,
         on_delete=models.PROTECT,
-        related_name='product_specification',
+        related_name='product_spec',
         blank=True,
         null=True
     )
@@ -141,7 +141,7 @@ class ProductSpecification(models.Model):
         Thickness,
         verbose_name=Thickness._meta.verbose_name,
         on_delete=models.PROTECT,
-        related_name='product_specification',
+        related_name='product_spec',
         blank=True,
         null=True
     )
@@ -149,7 +149,7 @@ class ProductSpecification(models.Model):
         Gloss,
         verbose_name=Gloss._meta.verbose_name,
         on_delete=models.PROTECT,
-        related_name='product_specification',
+        related_name='product_spec',
         blank=True,
         null=True
     )
@@ -157,7 +157,7 @@ class ProductSpecification(models.Model):
         Adhesion,
         verbose_name=Adhesion._meta.verbose_name,
         on_delete=models.PROTECT,
-        related_name='product_specification',
+        related_name='product_spec',
         blank=True,
         null=True
     )
@@ -165,7 +165,7 @@ class ProductSpecification(models.Model):
         Roughness,
         verbose_name=Roughness._meta.verbose_name,
         on_delete=models.PROTECT,
-        related_name='product_specification',
+        related_name='product_spec',
         blank=True,
         null=True
     )
@@ -173,7 +173,7 @@ class ProductSpecification(models.Model):
         Resistivity,
         verbose_name=Resistivity._meta.verbose_name,
         on_delete=models.PROTECT,
-        related_name='product_specification',
+        related_name='product_spec',
         blank=True,
         null=True
     )
@@ -181,7 +181,7 @@ class ProductSpecification(models.Model):
         HidingPower,
         verbose_name=HidingPower._meta.verbose_name,
         on_delete=models.PROTECT,
-        related_name='product_specification',
+        related_name='product_spec',
         blank=True,
         null=True
     )
@@ -191,7 +191,7 @@ class ProductSpecification(models.Model):
         verbose_name_plural = 'спецификации продуктов'
 
     def __str__(self):
-        return f'{self.product} спецификация'
+        return f'спецификация {self.product}'
 
     def delete(self, *args, **kwargs):
         """Override to delete referenced objects in one-to-one fields."""

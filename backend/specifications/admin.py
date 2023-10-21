@@ -33,7 +33,8 @@ class MethodAdmin(admin.ModelAdmin):
 
 class BaseSpecificationAdmin(admin.ModelAdmin):
     """Base specification class for admin site."""
-    list_display = ['id', 'method', 'min_value', 'max_value', 'uom']
+    list_display = ['id', 'product_spec', 'method', 'min_value',
+                    'max_value', 'uom']
 
 
 @admin.register(Density)
