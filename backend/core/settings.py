@@ -47,7 +47,11 @@ INSTALLED_APPS = [
     'api_v1',
     'docs',
     'products',
-    'specifications'
+    'specifications',
+    'clients',
+    'quality',
+    'actioncards',
+    'qualityproblems'
 ]
 
 MIDDLEWARE = [

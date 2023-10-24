@@ -19,6 +19,25 @@ from specifications.models import (
 )
 
 
+class ProductCategory(models.Model):
+    """Product category model."""
+    name = models.CharField(
+        verbose_name='название',
+        max_length=32
+    )
+    description = models.CharField(
+        verbose_name='описание',
+        max_length=128
+    )
+
+    class Meta:
+        verbose_name = 'категория продукта'
+        verbose_name_plural = 'категории продуктов'
+
+    def __str__(self):
+        return self.name
+
+
 class Product(models.Model):
     """Product model."""
     code = models.CharField(
@@ -31,13 +50,19 @@ class Product(models.Model):
         max_length=64,
         unique=True
     )
+#    category = models.ForeignKey(
+#        ProductCategory,
+#        on_delete=models.PROTECT,
+#        related_name='products',
+#        verbose_name='категория продукта'
+#    )
 
     class Meta:
         verbose_name = 'продукт'
         verbose_name_plural = 'продукты'
 
     def __str__(self):
-        return f'{self.code}'
+        return self.code
 
     def save(self, *args, **kwargs):
         """Create product specification for every new product."""

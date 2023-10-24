@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Product, ProductSpecification
+from .models import Product, ProductCategory, ProductSpecification
 
 
 @admin.register(Product)
@@ -14,3 +14,8 @@ class ProductSpecificationAdmin(admin.ModelAdmin):
                     'base_meq', 'solvent_content', 'conductivity',
                     'hegman_fineness', 'viscosity', 'thickness', 'gloss',
                     'adhesion', 'roughness', 'resistivity', 'hiding_power']
+
+
+@admin.register(ProductCategory)
+class ProductCategoryAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'description']
