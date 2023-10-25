@@ -47,7 +47,11 @@ INSTALLED_APPS = [
     'api_v1',
     'docs',
     'products',
-    'specifications'
+    'specifications',
+    'clients',
+    'quality',
+    'actioncards',
+    'qualityproblems'
 ]
 
 MIDDLEWARE = [
@@ -196,7 +200,7 @@ SECURE_PROXY_SSL_HEADER = ['HTTP_X_FORWARDED_PROTO', 'https']
         },
     },
     'loggers': {
-        'products_signals': {
+        'debug': {
             'handlers': ['console'],
             'level': 'INFO',
         },
