@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import (
+""" from .models import (
     AcidMeq,
     Adhesion,
     BaseMeq,
@@ -28,7 +28,7 @@ class UomAdmin(admin.ModelAdmin):
 
 @admin.register(Method)
 class MethodAdmin(admin.ModelAdmin):
-    pass
+    pass """
 
 
 class BaseSpecificationAdmin(admin.ModelAdmin):
@@ -37,6 +37,7 @@ class BaseSpecificationAdmin(admin.ModelAdmin):
                     'max_value', 'uom']
 
 
+"""
 @admin.register(Density)
 class DensityAdmin(BaseSpecificationAdmin):
     pass
@@ -110,3 +111,4 @@ class ResistivityAdmin(BaseSpecificationAdmin):
 @admin.register(HidingPower)
 class ResistivityAdmin(BaseSpecificationAdmin):
     pass
+ """
