@@ -6,9 +6,10 @@ from quality.models import StandardDefect
 
 class AbstractBaseAction(models.Model):
     """Abstract base action model."""
-    name = models.CharField(
-        verbose_name='наименование',
-        max_length=128
+    task = models.CharField(
+        verbose_name='задача',
+        max_length=128,
+        unique=True
     )
     description = models.CharField(
         verbose_name='описание',
@@ -19,7 +20,7 @@ class AbstractBaseAction(models.Model):
         abstract = True
 
     def __str__(self):
-        return self.name
+        return self.task
 
 
 class StandardProcessAction(AbstractBaseAction):

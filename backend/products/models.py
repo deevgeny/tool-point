@@ -50,12 +50,12 @@ class Product(models.Model):
         max_length=64,
         unique=True
     )
-#    category = models.ForeignKey(
-#        ProductCategory,
-#        on_delete=models.PROTECT,
-#        related_name='products',
-#        verbose_name='категория продукта'
-#    )
+    category = models.ForeignKey(
+        ProductCategory,
+        on_delete=models.PROTECT,
+        related_name='products',
+        verbose_name='категория продукта'
+    )
 
     class Meta:
         verbose_name = 'продукт'

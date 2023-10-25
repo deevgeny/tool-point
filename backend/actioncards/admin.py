@@ -9,7 +9,7 @@ from .models import (
 
 
 class BaseActionAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'description']
+    list_display = ['id', 'task', 'description']
 
 
 @admin.register(StandardProcessAction)

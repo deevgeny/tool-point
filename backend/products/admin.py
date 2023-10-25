@@ -5,7 +5,7 @@ from .models import Product, ProductCategory, ProductSpecification
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['id', 'code', 'name', 'specification']
+    list_display = ['id', 'code', 'name', 'category', 'specification']
 
 
 @admin.register(ProductSpecification)

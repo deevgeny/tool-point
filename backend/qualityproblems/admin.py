@@ -15,6 +15,7 @@ from .models import (
 @admin.register(LineProblem)
 class LineProblemAdmin(admin.ModelAdmin):
     list_display = ['id', 'reported_by', 'create_date', 'client', 'defect',
+                    'production_line', 'production_area', 'problem_start_date',
                     'status']
 
 

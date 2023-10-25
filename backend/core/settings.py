@@ -200,7 +200,7 @@ SECURE_PROXY_SSL_HEADER = ['HTTP_X_FORWARDED_PROTO', 'https']
         },
     },
     'loggers': {
-        'products_signals': {
+        'debug': {
             'handlers': ['console'],
             'level': 'INFO',
         },

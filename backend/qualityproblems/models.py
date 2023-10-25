@@ -10,6 +10,8 @@ from clients.models import Client
 from products.models import Product
 from quality.models import StandardDefect
 
+from .services import ActionService, LineProblemService
+
 User = get_user_model()
 
 
@@ -30,7 +32,7 @@ class LineProblem(models.Model):
         verbose_name='отчет создал',
     )
     create_date = models.DateTimeField(
-        verbose_name='дата создания',
+        verbose_name='дата создания отчета',
         auto_now_add=True
     )
     edited_by = models.ForeignKey(
@@ -72,6 +74,9 @@ class LineProblem(models.Model):
         related_name='line_problems',
         verbose_name='дефект'
     )
+    problem_start_date = models.DateTimeField(
+        verbose_name='дата возникновения проблемы',
+    )
     product = models.ForeignKey(
         Product,
         on_delete=models.PROTECT,
@@ -84,82 +89,96 @@ class LineProblem(models.Model):
     )
     batch_consumed = models.PositiveIntegerField(
         verbose_name='использовано на линии',
+        blank=True,
+        null=True
     )
     model = models.CharField(
         verbose_name='модель',
         max_length=64,
-        help_text='название модели/изделия'
+        help_text='название модели/изделия',
+        blank=True
     )
     defect_area = models.CharField(
-        verbose_name='зона расположения дефекта',
+        verbose_name='область расположения дефекта',
         max_length=128,
-        help_text='горизонталь / вертикаль, левая сторона / правая сторона ...'
+        help_text='горизонталь/вертикаль, левая сторона/правая сторона ...',
+        blank=True
     )
     defect_location = models.CharField(
         verbose_name='место расположения дефекта',
         max_length=128,
-        help_text='деталь/детали, конкретное место/места ...'
+        help_text='деталь/детали, конкретное место/места ...',
+        blank=True
     )
     number_of_models = models.PositiveSmallIntegerField(
         verbose_name='одна или несколько моделей',
-        default=1
+        blank=True,
+        null=True
     )
     number_of_lines = models.PositiveSmallIntegerField(
         verbose_name='одна или несколько линий',
-        default=1
+        blank=True,
+        null=True
     )
     number_of_shifts = models.PositiveSmallIntegerField(
         verbose_name='одна или несколько смен',
-        default=1
+        blank=True,
+        null=True
     )
     number_of_batches = models.PositiveSmallIntegerField(
         verbose_name='одна или несколько партий',
-        default=1
+        blank=True,
+        null=True
     )
     number_of_colors = models.PositiveSmallIntegerField(
         verbose_name='один или несколько цветов',
-        default=1
-    )
-    problem_start_date = models.DateTimeField(
-        verbose_name='дата и время появления проблемы',
+        blank=True,
+        null=True
     )
     batch_start_date = models.DateTimeField(
         verbose_name='дата и время начала использования партии',
+        blank=True,
+        null=True
     )
     problem_frequency = models.CharField(
         verbose_name='периодичность возникновения проблемы',
-        max_length=128
+        max_length=128,
+        blank=True
     )
-    dpu = models.PositiveSmallIntegerField(
-        verbose_name='количество дефектов на кузове/изделии'
+    dpu = models.PositiveSmallIntegerField(  # ForeignKey key stats
+        verbose_name='количество дефектов на кузове/изделии',
+        blank=True,
+        null=True
     )
-    number_of_units = models.PositiveSmallIntegerField(
-        verbose_name='количество дефектных кузовов/изделии'
-    )
-    process_change = models.CharField(
-        verbose_name='изменения процесса',
-        max_length=128
-    )
-    process_change = models.CharField(
-        verbose_name='изменения продукта',
-        max_length=128
+    number_of_units = models.PositiveSmallIntegerField(  # Foreign key stats
+        verbose_name='количество дефектных кузовов/изделии',
+        blank=True,
+        null=True
     )
     extra_info = models.CharField(
         verbose_name='дополнительная информация о проблеме',
-        max_length=2048
+        max_length=2048,
+        blank=True
     )
     batch_qty = models.PositiveIntegerField(
-        verbose_name='запас проблемной партии'
+        verbose_name='запас проблемной партии',
+        blank=True,
+        null=True
     )
     next_batch_qty = models.PositiveIntegerField(
-        verbose_name='запас следующей доступной партии'
+        verbose_name='запас следующей доступной партии',
+        blank=True,
+        null=True
     )
     planned_batch_info = models.CharField(
         verbose_name='информация о следующей запланированной партии',
-        max_length=128
+        max_length=128,
+        blank=True
     )
     qty_in_transit = models.PositiveIntegerField(
-        verbose_name='количество следующей партии в транзите'
+        verbose_name='количество следующей партии в транзите',
+        blank=True,
+        null=True
     )
 
     class Meta:
@@ -171,6 +190,11 @@ class LineProblem(models.Model):
 
     def save(self, *args, **kwargs):
         """Update report status."""
+        LineProblemService().update_status(self)
+        if not self.id:
+            super().save(*args, **kwargs)
+            ActionService().create_standard_actions(self)
+            return
         super().save(*args, **kwargs)
 
 
@@ -200,7 +224,7 @@ class AbstractBaseAction(models.Model):
         blank=True
     )
     comment = models.CharField(
-        verbose_name='результат',
+        verbose_name='комментарий',
         max_length=1024,
         blank=True
     )
@@ -317,8 +341,8 @@ class ExtraSampleAction(AbstractBaseAction):
     )
 
     class Meta:
-        verbose_name = 'действие по отправке образца'
-        verbose_name_plural = 'действия по отправке образцов'
+        verbose_name = 'действие по отправке дополнительного образца'
+        verbose_name_plural = 'действия по отправке дополнительных образцов'
 
 
 class ExtraAction(AbstractBaseAction):
