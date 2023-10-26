@@ -371,7 +371,7 @@ class ExtraAction(AbstractBaseAction):
         max_length=256
     )
     action_type = models.CharField(
-        verbose_name='',
+        verbose_name='Категория действия',
         max_length=16,
         choices=ActionType.choices,
     )
