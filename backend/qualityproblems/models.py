@@ -305,7 +305,7 @@ class SampleAction(AbstractBaseAction):
     problem = models.ForeignKey(
         LineProblem,
         on_delete=models.CASCADE,
-        related_name='samples',
+        related_name='sample_actions',
         verbose_name='проблема'
     )
 
@@ -337,7 +337,6 @@ class ExtraSampleAction(AbstractBaseAction):
         on_delete=models.PROTECT,
         related_name='created_extra_samples',
         verbose_name='добавил',
-        editable=False
     )
 
     class Meta:
@@ -380,7 +379,6 @@ class ExtraAction(AbstractBaseAction):
         on_delete=models.PROTECT,
         related_name='created_extra_actions',
         verbose_name='добавил',
-        editable=False
     )
 
     class Meta:

@@ -2,6 +2,7 @@ from django.db.models.deletion import ProtectedError
 from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
+from api.v1.exceptions import ProtectedErrorException
 from specifications.models import (
     AcidMeq,
     Adhesion,
@@ -23,7 +24,6 @@ from specifications.models import (
 )
 
 from . import serializers
-from api_v1.exceptions import ProtectedErrorException
 
 
 class SpecDestroyModelMixin(mixins.DestroyModelMixin):

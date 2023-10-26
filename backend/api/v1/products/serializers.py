@@ -1,8 +1,7 @@
 from rest_framework import serializers
 
+from api.v1.specifications import serializers as spec_serializers
 from products.models import Product, ProductSpecification
-
-from api_v1.specifications import serializers as spec_serializers
 
 
 class ProductSpecificationSerializer(serializers.ModelSerializer):

@@ -39,24 +39,24 @@ class ActionService:
         queryset = self.get_queryset(obj)
         objects = {'process_action': [], 'product_action': [],
                    'sample_action': []}
-        # Create action objects
-        for obj in queryset:
-            if obj.process_action:
+        # Create action objects from standard action matrix
+        for matrix in queryset:
+            if matrix.process_action:
                 objects['process_action'].append(
                     models.ProcessAction(responsible=obj.reported_by,
-                                         action=obj.process_action,
+                                         action=matrix.process_action,
                                          problem=obj)
                 )
-            if obj.product_action:
+            if matrix.product_action:
                 objects['product_action'].append(
                     models.ProductAction(responsible=obj.reported_by,
-                                         action=obj.product_action,
+                                         action=matrix.product_action,
                                          problem=obj)
                 )
-            if obj.sample_action:
+            if matrix.sample_action:
                 objects['sample_action'].append(
                     models.SampleAction(responsible=obj.reported_by,
-                                        action=obj.sample_action,
+                                        action=matrix.sample_action,
                                         problem=obj)
                 )
         # Bulk create standard actions
