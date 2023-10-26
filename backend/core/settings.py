@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'django_filters',
     'drf_yasg',
     'users',
-    'api_v1',
+    'api',
     'docs',
     'products',
     'specifications',
@@ -176,7 +176,7 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'TOKEN_OBTAIN_SERIALIZER': 'api_v1.auth.serializers.CustomTokenObtainPairSerializer',
+    'TOKEN_OBTAIN_SERIALIZER': 'api.v1.auth.serializers.CustomTokenObtainPairSerializer',
 }
 
 # CORS settings

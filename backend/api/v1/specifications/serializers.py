@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
+from api.v1.exceptions import AlreadyExistsException
 from products.models import ProductSpecification
 from specifications.models import (
     AcidMeq,
@@ -21,8 +22,6 @@ from specifications.models import (
     Uom,
     Viscosity,
 )
-
-from api_v1.exceptions import AlreadyExistsException
 
 
 class UomSerializer(serializers.ModelSerializer):
