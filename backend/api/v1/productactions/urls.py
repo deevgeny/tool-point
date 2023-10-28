@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 from .views import ProductActionViewSet
 
 router = DefaultRouter(trailing_slash=False)
-router.register('product-actions', ProductActionViewSet)
+router.register('product-actions', ProductActionViewSet, 'product-action')
 
 urlpatterns = [
     path('', include(router.urls))

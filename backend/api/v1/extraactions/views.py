@@ -7,7 +7,12 @@ from .serializers import ExtraActionListSerializer, ExtraActionSerializer
 
 class ExtraActionViewSet(ModelViewSet):
     """ExtraAction model view set."""
-    queryset = ExtraAction.objects.all()
+    def get_queryset(self):
+        if self.action == 'list':
+            return (ExtraAction.objects
+                    .select_related('responsible', 'created_by')
+                    .order_by('id').all())
+        return ExtraAction.objects.all()
 
     def get_serializer_class(self):
         if self.action == 'list':

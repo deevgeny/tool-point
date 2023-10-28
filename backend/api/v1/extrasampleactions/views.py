@@ -10,7 +10,12 @@ from .serializers import (
 
 class ExtraSampleActionViewSet(ModelViewSet):
     """ExtraSampleAction model view set."""
-    queryset = ExtraSampleAction.objects.all()
+    def get_queryset(self):
+        if self.action == 'list':
+            return (ExtraSampleAction.objects
+                    .select_related('responsible', 'created_by')
+                    .order_by('id').all())
+        return ExtraSampleAction.objects.all()
 
     def get_serializer_class(self):
         if self.action == 'list':

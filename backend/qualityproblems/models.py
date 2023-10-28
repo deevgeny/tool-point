@@ -52,7 +52,8 @@ class LineProblem(models.Model):
         verbose_name='статус',
         max_length=16,
         choices=Status.choices,
-        default=Status.FILL
+        default=Status.FILL,
+        blank=True
     )
     client = models.ForeignKey(
         Client,

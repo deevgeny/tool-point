@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 from .views import CountermeasureViewSet
 
 router = DefaultRouter(trailing_slash=False)
-router.register('countermeasures', CountermeasureViewSet)
+router.register('countermeasures', CountermeasureViewSet, 'countermeasure')
 
 urlpatterns = [
     path('', include(router.urls))
