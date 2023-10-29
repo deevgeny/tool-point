@@ -20,6 +20,7 @@ import NotFound from './pages/NotFound';
 import Unauthorized from './pages/Unauthorized';
 import AuthorizedOnly from './permissions/AuthorizedOnly';
 import AnonymousOnly from './permissions/AnonymousOnly';
+import FirstLevelAnalysis from './pages/FirstLevelAnalysis';
 
 const ROLES = {
   User: 'USER'
@@ -46,6 +47,7 @@ function App() {
             <Route path='/stock' element={<Stock />} />
             <Route path='/stats' element={<Stats />} />
             <Route path='/tools' element={<Tools />} />
+            <Route path='/tools/first-level-analysis' element={<FirstLevelAnalysis />} />
           </Route>
         </Route>
 

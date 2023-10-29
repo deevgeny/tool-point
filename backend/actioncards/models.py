@@ -41,7 +41,7 @@ class StandardSampleAction(AbstractBaseAction):
     """Standard sample action model."""
     class Meta:
         verbose_name = 'стандартное действие по отправке образца'
-        verbose_name_plural = 'стандартные действия по проверке образцов'
+        verbose_name_plural = 'стандартные действия по отправке образцов'
 
 
 class StandardActionMatrix(models.Model):

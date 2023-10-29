@@ -8,7 +8,7 @@ class ExtraActionSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExtraAction
         fields = ['id', 'problem', 'action', 'action_type', 'responsible',
-                  'date', 'status', 'result', 'comment', 'created_by']
+                  'date', 'status', 'result', 'comment', 'requested_by']
 
 
 class ExtraActionListSerializer(ExtraActionSerializer):
@@ -16,11 +16,11 @@ class ExtraActionListSerializer(ExtraActionSerializer):
     action_type = serializers.SerializerMethodField()
     responsible = serializers.SerializerMethodField()
     status = serializers.SerializerMethodField()
-    created_by = serializers.SerializerMethodField()
+    requested_by = serializers.SerializerMethodField()
 
     class Meta(ExtraActionSerializer.Meta):
         fields = ['id', 'action', 'action_type', 'responsible', 'date',
-                  'status', 'result', 'comment', 'created_by']
+                  'status', 'result', 'comment', 'requested_by']
 
     def get_action_type(self, obj):
         return obj.get_action_type_display()
@@ -31,5 +31,5 @@ class ExtraActionListSerializer(ExtraActionSerializer):
     def get_status(self, obj):
         return obj.get_status_display()
 
-    def get_created_by(self, obj):
-        return f'{obj.created_by.last_name} {obj.created_by.first_name}'
+    def get_requested_by(self, obj):
+        return f'{obj.requested_by.last_name} {obj.requested_by.first_name}'

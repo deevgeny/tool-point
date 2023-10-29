@@ -10,7 +10,7 @@ class ExtraActionViewSet(ModelViewSet):
     def get_queryset(self):
         if self.action == 'list':
             return (ExtraAction.objects
-                    .select_related('responsible', 'created_by')
+                    .select_related('responsible', 'requested_by')
                     .order_by('id').all())
         return ExtraAction.objects.all()
 

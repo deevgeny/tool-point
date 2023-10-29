@@ -1,12 +1,10 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 
 
 function Stock() {
   return (
-    <Container maxWidth='lg' sx={{ mt: 4, mb: 4 }}>
       <Grid
         container
         spacing={3}
@@ -18,7 +16,6 @@ function Stock() {
           <Typography variant='body'>Данная страница находится в разработке.</Typography>
         </Grid>
       </Grid>
-    </Container>
   );
 }
 

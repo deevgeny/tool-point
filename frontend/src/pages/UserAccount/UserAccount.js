@@ -6,10 +6,10 @@ import RouterBackButton from '../../components/RouterBackButton';
 
 function UserAccount() {
   return (
-    <Container component='main' maxWidth='xs'>
+    <Container maxWidth='xs'>
       <UserEditForm />
       <UserPasswordChangeForm />
-    <RouterBackButton />
+      <RouterBackButton />
     </Container>
   );
 }

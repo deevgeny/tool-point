@@ -31,6 +31,10 @@ class Api {
   changePassword(conf) {
     return this.fetch.patch('/users/change-password', conf);
   }
+
+  getLineProblems(conf) {
+    return this.fetch.get('/line-problems', conf);
+  }
 }
 
 const ApiService = new Api(FetchService);

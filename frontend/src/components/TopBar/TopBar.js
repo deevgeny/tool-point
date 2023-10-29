@@ -41,8 +41,7 @@ function TopBar({ open, toggleDrawer }) {
   const [pageTitle, setPageTitle] = useState('');
   const { setAuth } = useAuthContext();
   const navigate = useNavigate();
-  const location = useLocation();
-  const pathname = location.pathname;
+  const pathname = useLocation().pathname;
   
   function handleLogout() {
     TokenService.clear();

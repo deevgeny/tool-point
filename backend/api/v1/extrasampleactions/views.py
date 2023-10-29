@@ -13,7 +13,7 @@ class ExtraSampleActionViewSet(ModelViewSet):
     def get_queryset(self):
         if self.action == 'list':
             return (ExtraSampleAction.objects
-                    .select_related('responsible', 'created_by')
+                    .select_related('responsible', 'requested_by')
                     .order_by('id').all())
         return ExtraSampleAction.objects.all()
 

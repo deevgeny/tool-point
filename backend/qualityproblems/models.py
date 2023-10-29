@@ -141,8 +141,8 @@ class LineProblem(models.Model):
         blank=True,
         null=True
     )
-    problem_frequency = models.CharField(
-        verbose_name='периодичность возникновения проблемы',
+    defect_frequency = models.CharField(
+        verbose_name='периодичность возникновения дефекта',
         max_length=128,
         blank=True
     )
@@ -333,11 +333,11 @@ class ExtraSampleAction(AbstractBaseAction):
         related_name='extra_samples',
         verbose_name='проблема'
     )
-    created_by = models.ForeignKey(
+    requested_by = models.ForeignKey(
         User,
         on_delete=models.PROTECT,
-        related_name='created_extra_samples',
-        verbose_name='добавил',
+        related_name='requested_samples',
+        verbose_name='запросил',
     )
 
     class Meta:
@@ -375,11 +375,11 @@ class ExtraAction(AbstractBaseAction):
         max_length=16,
         choices=ActionType.choices,
     )
-    created_by = models.ForeignKey(
+    requested_by = models.ForeignKey(
         User,
         on_delete=models.PROTECT,
-        related_name='created_extra_actions',
-        verbose_name='добавил',
+        related_name='requested_actions',
+        verbose_name='запросил',
     )
 
     class Meta:

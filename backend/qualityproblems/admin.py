@@ -22,13 +22,13 @@ class LineProblemAdmin(admin.ModelAdmin):
 @admin.register(ExtraAction)
 class ExtraActionAdmin(admin.ModelAdmin):
     list_display = ['id', 'responsible', 'action', 'action_type', 'problem',
-                    'date', 'status', 'result', 'comment', 'created_by']
+                    'date', 'status', 'result', 'comment', 'requested_by']
 
 
 @admin.register(ExtraSampleAction)
 class ExtraSampleActionAdmin(admin.ModelAdmin):
     list_display = ['id', 'responsible', 'action', 'problem', 'date', 'status',
-                    'result', 'comment', 'created_by']
+                    'result', 'comment', 'requested_by']
 
 
 class BaseActionAdmin(admin.ModelAdmin):
