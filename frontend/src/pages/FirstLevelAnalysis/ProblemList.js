@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Typography } from '@mui/material';
+import { Grid, Typography, CircularProgress } from '@mui/material';
 import ApiService from '../../services/api';
 import useError from '../../hooks/useError';
 import ProblemItem from './ProblemItem';
@@ -7,7 +7,7 @@ import ProblemItem from './ProblemItem';
 function ProblemList() {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(false);
-  const { error, setError } = useError();
+  const { setError } = useError();
 
   useEffect(() => {
     const controller = new AbortController();
@@ -16,7 +16,7 @@ function ProblemList() {
       const response = await ApiService.getLineProblems({
         signal: controller.signal
       });
-      if (!response.ok) {
+      if (!response.ok && !controller.signal.aborted) {
         setError(response);
         setLoading(false);
       } else {
@@ -27,6 +27,10 @@ function ProblemList() {
     }
 
     getData();
+
+    return () => {
+      controller.abort();
+    }
 
     // eslint-disable-next-line
   }, [])
@@ -39,17 +43,18 @@ function ProblemList() {
       my={1}
     >
       {
-        data.count
-          ? data.results.map(problem =>
-              <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                <ProblemItem problem={problem} />
-              </Grid>         
-            )
-          : <Typography variant='h6' component='div' align='center'>
-              У вас пока нет отчетов
-            </Typography>
+        loading
+          ? <CircularProgress />
+          : data.count
+            ? data.results.map(problem =>
+              <Grid item key={problem.id} xs={12} sm={12} md={12} lg={12} xl={12}>
+                  <ProblemItem problem={problem} />
+                </Grid>         
+              )
+            : <Typography variant='h6' component='div' align='center'>
+                У вас пока нет отчетов
+              </Typography>
       }
-
     </Grid>
   );
 }

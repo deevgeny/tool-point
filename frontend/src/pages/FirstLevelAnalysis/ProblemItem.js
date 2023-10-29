@@ -18,7 +18,7 @@ function ProblemItem({ problem }) {
           </Grid>
           <Grid item xs={12} sm={6} md={2} lg={2} xl={2}>
               <Typography variant='body2'>
-                {problem.problem_start_date.replace('T', ' ').slice(0, -6)}
+                {problem.problem_start_date.replace('T', ' ').slice(0, 16)}
               </Typography>
           </Grid>
           <Grid item xs={12} sm={6} md={2} lg={2} xl={2}>
