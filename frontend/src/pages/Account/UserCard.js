@@ -8,11 +8,13 @@ import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 import RouterLinkButton from '../../components/RouterLinkButton';
 import ApiService from '../../services/api';
+import useError from '../../hooks/useError';
 
 
 function UserCard() {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(false);
+  const { setError } = useError();
 
   useEffect(() => {
     const controller = new AbortController();
@@ -21,9 +23,14 @@ function UserCard() {
       const response = await ApiService.getPersonalData({
         signal: controller.signal
       });
-      const data = await response?.json?.();
-      setLoading(false);
-      setData(data || {});
+      if (!response.ok && !controller.signal.aborted) {
+        setError(response);
+        setLoading(false);
+      } else {
+        const data = await response?.json?.();
+        setLoading(false);
+        setData(data || {});
+      }
     }
 
     getData();

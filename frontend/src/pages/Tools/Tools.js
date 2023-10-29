@@ -13,7 +13,7 @@ function Tools() {
         alignItems='center'
       >
         {toolCards.map(tool => 
-          <Grid item xs={12} sm={6} md={3} lg={3} xl={3}>
+          <Grid item key={tool.id} xs={12} sm={6} md={3} lg={3} xl={3}>
             <ToolCard tool={{...tool}} />
           </Grid>
         )}
