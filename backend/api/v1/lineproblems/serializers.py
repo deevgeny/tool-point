@@ -54,7 +54,7 @@ class LineProblemCreateRetrieveUpdateSerializer(serializers.ModelSerializer):
                   'batch_consumed', 'model', 'defect_area', 'defect_location',
                   'number_of_models', 'number_of_lines', 'number_of_shifts',
                   'number_of_batches', 'number_of_colors', 'batch_start_date',
-                  'problem_frequency', 'dpu', 'number_of_units', 'extra_info',
+                  'defect_frequency', 'dpu', 'number_of_units', 'extra_info',
                   'batch_qty', 'next_batch_qty', 'planned_batch_info',
                   'qty_in_transit', 'process_actions', 'product_actions',
                   'sample_actions', 'extra_actions', 'extra_samples',

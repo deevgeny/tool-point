@@ -1,3 +1,4 @@
+// Tob bar titles
 export const TITLE = {
   '/': 'Главная',
   '/account': 'Мой аккаунт',
@@ -7,6 +8,7 @@ export const TITLE = {
   '/stock': 'Склад',
   '/stats': 'Статистика',
   '/tools': 'Инструменты',
+  '/tools/first-level-analysis': 'Инструменты - анализ первого уровня'
 }
 
 export function get_page_title(pathname) {

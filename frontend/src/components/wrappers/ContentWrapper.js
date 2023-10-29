@@ -1,5 +1,5 @@
 import React from 'react';
-import Box from '@mui/material/Box';
+import { Box, Container, Toolbar } from '@mui/material';
 
 function ContentWrapper({ children }) {
   // Used to wrap only page content (no Drawer/AppBar e.g. side/top bar )
@@ -16,7 +16,10 @@ function ContentWrapper({ children }) {
         overflow: 'auto',
       }}
     > 
-      {children}
+      <Toolbar />
+      <Container maxWidth='xl' sx={{ mt: 4, mb: 4 }}>
+        {children}
+      </Container>
     </Box>
   );
 }

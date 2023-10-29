@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Toolbar from '@mui/material/Toolbar';
 import SideBar from '../components/SideBar';
 import TopBar from '../components/TopBar';
 import ContentWrapper from '../components/wrappers/ContentWrapper';
@@ -19,7 +18,6 @@ function DashboardLayout() {
       <TopBar open={open} toggleDrawer={toggleDrawer} />
       <SideBar open={open} toggleDrawer={toggleDrawer} />
       <ContentWrapper>
-        <Toolbar />
         <Outlet />
         <ErrorDialog />
       </ContentWrapper>

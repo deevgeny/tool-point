@@ -1,24 +1,25 @@
 import React from 'react';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-
+import ToolCard from './ToolCard';
+import RouterBackButton from '../../components/RouterBackButton';
+import { toolCards } from '../../utils/constants';
 
 function Tools() {
   return (
-    <Container maxWidth='lg' sx={{ mt: 4, mb: 4 }}>
+    <>
       <Grid
         container
         spacing={3}
         alignItems='center'
-        //justifyContent='space-around'
       >
-        <Grid item xs={12} sm={12} md={12} lg={12}>
-          <Typography variant='h3'>Инструменты</Typography>
-          <Typography variant='body'>Данная страница находится в разработке.</Typography>
-        </Grid>
+        {toolCards.map(tool => 
+          <Grid item xs={12} sm={6} md={3} lg={3} xl={3}>
+            <ToolCard tool={{...tool}} />
+          </Grid>
+        )}
       </Grid>
-    </Container>
+      <RouterBackButton />
+    </>
   );
 }
 

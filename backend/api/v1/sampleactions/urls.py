@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 from .views import SampleActionViewSet
 
 router = DefaultRouter(trailing_slash=False)
-router.register('sample-actions', SampleActionViewSet)
+router.register('sample-actions', SampleActionViewSet, 'sample-action')
 
 urlpatterns = [
     path('', include(router.urls))

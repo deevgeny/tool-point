@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 from .views import ExtraSampleActionViewSet
 
 router = DefaultRouter(trailing_slash=False)
-router.register('extra-samples', ExtraSampleActionViewSet)
+router.register('extra-samples', ExtraSampleActionViewSet, 'extra-sample')
 
 urlpatterns = [
     path('', include(router.urls))
