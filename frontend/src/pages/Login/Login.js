@@ -61,14 +61,14 @@ function Login() {
       if (response?.status === 200) {
         const data = await response.json?.();
         const decodedToken = jose.decodeJwt(data.access);
+        TokenService.updateAccessToken(data.access);
+        TokenService.updateRefreshToken(data.refresh);
         setAuth({
           access: data.access,
           refresh: data.refresh,
           role: decodedToken.role
         });
-        TokenService.updateAccessToken(data.access);
-        TokenService.updateRefreshToken(data.refresh);
-        navigate('/', { replace: true });
+        TokenService.isAccessTokenValid() && navigate('/', { replace: true });
       } else if (response?.status === 401) {
         setMessage({
           severity: 'error',

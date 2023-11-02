@@ -14,6 +14,7 @@ class Api {
   
   logout(conf) {
     TokenService.clear();
+    this.fetch.clear_auth_headers();
   }
 
   register(conf) {
