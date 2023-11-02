@@ -1,6 +1,5 @@
 import TokenService from './token';
 
-
 const {
   REACT_APP_API_URL: API_URL,
   REACT_APP_API_PREFIX: API_PREFIX,
@@ -77,6 +76,11 @@ class Fetch {
         } else {
           TokenService.clear();
         }
+      } else if ( // If headers keep old token but local storage token was updated
+        response?.status === 401
+        && TokenService.isAccessTokenValid()
+      ) {
+        this.#updateHeadersAuthorization();
       }
       return response;
     } catch (error) {
@@ -114,6 +118,11 @@ class Fetch {
     // Main entrypoint to send request or create API function calls
     const request = this.#createRequest(url, { method: 'DELETE', ...conf });
     return this.#handleRequest(request);
+  }
+
+  clear_auth_headers() {
+    // Remove authorization headers
+    delete this.#headers.Authorization;
   }
 }
 
